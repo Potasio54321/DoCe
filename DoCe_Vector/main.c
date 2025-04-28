@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
-
+#include "Headers/Menu.h"
 int main()
 {
-    printf("Hello world!\n");
+    menu();
     return 0;
 }
