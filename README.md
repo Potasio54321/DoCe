@@ -3,9 +3,10 @@ Doce un juego de cartas por turnos, que simula una
 batalla entre un jugador humano y una computadora. El objetivo es alcanzar 12
 puntos antes que el oponente, utilizando cartas con distintos efectos. 
 ## Reglas del Juego
-• El jugador y la máquina comienzan con 0 puntos y una mano de 3 cartas
-cada uno.
-• Ningún jugador puede tener puntos negativos
+El jugador y la máquina comienzan con 0 puntos y una mano de 3 cartas
+cada uno.__
+
+Ningún jugador puede tener puntos negativos
 • Las cartas tienen diferentes efectos, entre ellos:
 o +2 o +1 puntos para quien la juega.
 o Sacar puntos al rival (-1 o -2).
