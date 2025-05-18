@@ -1,0 +1,15 @@
+# depslib dependency file v1.0
+1747591502 source:c:\users\nuevo usuario\documents\c\algoritmos\tp\dev\doce\doce_vector\main.c
+	<stdio.h>
+	<stdlib.h>
+	"Headers/Menu.h"
+
+1747591474 source:c:\users\nuevo usuario\documents\c\algoritmos\tp\dev\doce\doce_vector\sources\menu.c
+	"..\Headers\Menu.h"
+	<string.h>
+	<stdlib.h>
+	<stdio.h>
+
+1747591648 c:\users\nuevo usuario\documents\c\algoritmos\tp\dev\doce\doce_vector\headers\menu.h
+	<stddef.h>
+
