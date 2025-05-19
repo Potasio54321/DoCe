@@ -1,4 +1,5 @@
 #include "..\Headers\Menu.h"
+#include "..\Headers\Logica.h"
 #define TAMBUFFER 256
 #include <string.h>
 #include <stdlib.h>
@@ -38,6 +39,10 @@ int menu(char opcion)
     {
     case CONDJUGAR:
         puts("Estas Jugando");
+        partida();
+        system("pause");
+        system("cls");
+        mostrarMenu();
         break;
     case CONDVERRANKING:
         puts("Estas viendo el Ranking");
