@@ -1,34 +1,65 @@
 #include "..\Headers\Menu.h"
+#include "..\Headers\Logica.h"
+#define TAMBUFFER 256
+#include <string.h>
+#include <stdlib.h>
 #include <stdio.h>
-int menu()
+// Registro
+void registrarInput(char *buffer, size_t tamBuffer, Cond cond)
 {
-    char opcion;
-    char buffer[TAMBUFFER];
-    do
+    fgets(buffer, tamBuffer, stdin);
+    while(!cond(buffer) || limpiarBuffer(buffer))
     {
-        puts("=============== MENU ===============");
-        puts("A) Jugar.");
-        puts("B) Ver Ranking.");
-        puts("C) Salir.");
-        fgets(buffer, sizeof(buffer), stdin);
-        if(buffer[2]!= '\0')
-            opcion = '\0';
-        else
-            opcion = buffer[0];
-        switch (opcion)
-        {
-            case 'A':
-                puts("Estas Jugando");
-                break;
-            case 'B':
-                puts("Estas viendo el Ranking");
-                break;
-            case FINCOND:
-                printf("Saliendo del programa...\n");
-                break;
-            default:
-                printf("Opcion no valida, por favor intente de nuevo.\n");
-        }
-    } while (opcion != FINCOND);
-    return 0;
+        puts("Ingreso Invalido");
+        fgets(buffer, tamBuffer, stdin);
+    }
+}
+int limpiarBuffer(char *bufferOriginal)
+{
+    char bufferLimpieza[TAMBUFFER];
+    if(strchr(bufferOriginal,'\n')!=NULL)
+        return 0;
+    while (strchr(bufferLimpieza,'\n')==NULL)
+    {
+        fgets(bufferLimpieza, TAMBUFFER, stdin);
+    }
+    return 1;
+}
+// Condiciones
+int condIgual3(const void *Buffer)
+{
+    const char *buffer = Buffer;
+    return buffer[2] == '\0';
+}
+int menu(char opcion)
+{
+    system("cls");
+    mostrarMenu();
+    switch (opcion)
+    {
+    case CONDJUGAR:
+        puts("Estas Jugando");
+        partida();
+        system("pause");
+        system("cls");
+        mostrarMenu();
+        break;
+    case CONDVERRANKING:
+        puts("Estas viendo el Ranking");
+        break;
+    case CONDSALIR:
+        puts("Saliendo del programa...");
+        break;
+    default:
+        puts("Opcion no valida, por favor intente de nuevo.");
+    }
+    return opcion;
+}
+void mostrarMenu()
+{
+    puts("=============== MENU ===============");
+    printf("%c) Jugar.\n",CONDJUGAR);
+    printf("%c) Ver Ranking.\n",CONDVERRANKING);
+    printf("%c) Salir.\n",CONDSALIR);
+    puts("Ingrese solo un Caracter");
 }

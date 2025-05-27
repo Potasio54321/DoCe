@@ -1,12 +1,31 @@
 # depslib dependency file v1.0
-1745868849 source:c:\users\nuevo usuario\documents\c\algoritmos\tp\dev\doce\doce_vector\main.c
+1747591502 source:c:\users\nuevo usuario\documents\c\algoritmos\tp\dev\doce\doce_vector\main.c
 	<stdio.h>
 	<stdlib.h>
 	"Headers/Menu.h"
 
-1745868998 source:c:\users\nuevo usuario\documents\c\algoritmos\tp\dev\doce\doce_vector\sources\menu.c
+1747691020 source:c:\users\nuevo usuario\documents\c\algoritmos\tp\dev\doce\doce_vector\sources\menu.c
 	"..\Headers\Menu.h"
+	"..\Headers\Logica.h"
+	<string.h>
+	<stdlib.h>
 	<stdio.h>
 
-1745869043 c:\users\nuevo usuario\documents\c\algoritmos\tp\dev\doce\doce_vector\headers\menu.h
+1747591648 c:\users\nuevo usuario\documents\c\algoritmos\tp\dev\doce\doce_vector\headers\menu.h
+	<stddef.h>
+
+1747690993 source:c:\users\nuevo usuario\documents\c\algoritmos\tp\dev\doce\doce_vector\sources\logica.c
+	"../Headers/Logica.h"
+	<time.h>
+
+1747682471 c:\users\nuevo usuario\documents\c\algoritmos\tp\dev\doce\doce_vector\headers\logica.h
+	"PilaEstatica.h"
+
+1747672682 c:\users\nuevo usuario\documents\c\algoritmos\tp\dev\doce\doce_vector\headers\pilaestatica.h
+	<stdio.h>
+	<stdlib.h>
+
+1747672682 source:c:\users\nuevo usuario\documents\c\algoritmos\tp\dev\doce\doce_vector\sources\pilaestatica.c
+	"../Headers/PilaEstatica.h"
+	<string.h>
 
