@@ -1,0 +1,33 @@
+# depslib dependency file v1.0
+1748400608 source:c:\users\usuario\desktop\algoritmos de progra - 1c 2025\doce jueguito\desarrollojugar\funciones.c
+	"funcioneslista.h"
+
+1748399631 c:\users\usuario\desktop\algoritmos de progra - 1c 2025\doce jueguito\desarrollojugar\funcioneslista.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1739832086 source:c:\users\usuario\desktop\algoritmos de progra - 1c 2025\doce jueguito\desarrollojugar\sistema.c
+	"Sistema.h"
+
+1739832086 c:\users\usuario\desktop\algoritmos de progra - 1c 2025\doce jueguito\desarrollojugar\sistema.h
+	"stdlib.h"
+	"stdio.h"
+
+1748400152 source:c:\users\usuario\desktop\algoritmos de progra - 1c 2025\doce jueguito\desarrollojugar\main.c
+	"juego.h"
+
+1748400596 c:\users\usuario\desktop\algoritmos de progra - 1c 2025\doce jueguito\desarrollojugar\juego.h
+	<ctype.h>
+	"stdlib.h"
+	"stdio.h"
+	"funcioneslista.h"
+	"Sistema.h"
+
+1748400758 source:c:\users\usuario\desktop\algoritmos de progra - 1c 2025\doce jueguito\desarrollojugar\graficos.c
+	"juego.h"
+
+1748400596 source:c:\users\usuario\desktop\algoritmos de progra - 1c 2025\doce jueguito\desarrollojugar\juego.c
+	"juego.h"
+	<time.h>
+
