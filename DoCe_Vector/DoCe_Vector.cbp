@@ -31,8 +31,28 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="Headers/Lista.h" />
+		<Unit filename="Headers/Logica.h" />
 		<Unit filename="Headers/Menu.h" />
+		<Unit filename="Headers/PilaEstatica.h" />
+		<Unit filename="Headers/Ranking.h" />
+		<Unit filename="Headers/cJSON.h" />
+		<Unit filename="Sources/Lista.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Sources/Logica.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="Sources/Menu.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Sources/PilaEstatica.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Sources/Ranking.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Sources/cJSON.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="main.c">

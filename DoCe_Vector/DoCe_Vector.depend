@@ -4,9 +4,10 @@
 	<stdlib.h>
 	"Headers/Menu.h"
 
-1747691020 source:c:\users\nuevo usuario\documents\c\algoritmos\tp\dev\doce\doce_vector\sources\menu.c
+1748376444 source:c:\users\nuevo usuario\documents\c\algoritmos\tp\dev\doce\doce_vector\sources\menu.c
 	"..\Headers\Menu.h"
 	"..\Headers\Logica.h"
+	"../Headers/Ranking.h"
 	<string.h>
 	<stdlib.h>
 	<stdio.h>
@@ -14,11 +15,11 @@
 1747591648 c:\users\nuevo usuario\documents\c\algoritmos\tp\dev\doce\doce_vector\headers\menu.h
 	<stddef.h>
 
-1747690993 source:c:\users\nuevo usuario\documents\c\algoritmos\tp\dev\doce\doce_vector\sources\logica.c
+1747691555 source:c:\users\nuevo usuario\documents\c\algoritmos\tp\dev\doce\doce_vector\sources\logica.c
 	"../Headers/Logica.h"
 	<time.h>
 
-1747682471 c:\users\nuevo usuario\documents\c\algoritmos\tp\dev\doce\doce_vector\headers\logica.h
+1748376241 c:\users\nuevo usuario\documents\c\algoritmos\tp\dev\doce\doce_vector\headers\logica.h
 	"PilaEstatica.h"
 
 1747672682 c:\users\nuevo usuario\documents\c\algoritmos\tp\dev\doce\doce_vector\headers\pilaestatica.h
@@ -28,4 +29,36 @@
 1747672682 source:c:\users\nuevo usuario\documents\c\algoritmos\tp\dev\doce\doce_vector\sources\pilaestatica.c
 	"../Headers/PilaEstatica.h"
 	<string.h>
+
+1748398211 source:c:\users\nuevo usuario\documents\c\algoritmos\tp\dev\doce\doce_vector\sources\ranking.c
+	<curl/curl.h>
+	"../Headers/cJSON.h"
+	"../Headers/Ranking.h"
+	"../Headers/Lista.h"
+	<stdio.h>
+
+1748397525 c:\users\nuevo usuario\documents\c\algoritmos\tp\dev\doce\doce_vector\headers\ranking.h
+	<stddef.h>
+
+1748391152 source:c:\users\nuevo usuario\documents\c\algoritmos\tp\dev\doce\doce_vector\sources\cjson.c
+	<string.h>
+	<stdio.h>
+	<math.h>
+	<stdlib.h>
+	<limits.h>
+	<ctype.h>
+	<float.h>
+	<locale.h>
+	"../Headers/cJSON.h"
+
+1739812926 c:\users\nuevo usuario\documents\c\algoritmos\tp\dev\doce\doce_vector\headers\cjson.h
+	<stddef.h>
+
+1748397176 source:c:\users\nuevo usuario\documents\c\algoritmos\tp\dev\doce\doce_vector\sources\lista.c
+	"../Headers/lista.h"
+	<stdlib.h>
+	<string.h>
+
+1748397185 c:\users\nuevo usuario\documents\c\algoritmos\tp\dev\doce\doce_vector\headers\lista.h
+	<stddef.h>
 

@@ -1,5 +1,6 @@
 #include "..\Headers\Menu.h"
 #include "..\Headers\Logica.h"
+#include "../Headers/Ranking.h"
 #define TAMBUFFER 256
 #include <string.h>
 #include <stdlib.h>
@@ -46,6 +47,10 @@ int menu(char opcion)
         break;
     case CONDVERRANKING:
         puts("Estas viendo el Ranking");
+        verRanking();
+        system("pause");
+        system("cls");
+        mostrarMenu();
         break;
     case CONDSALIR:
         puts("Saliendo del programa...");
