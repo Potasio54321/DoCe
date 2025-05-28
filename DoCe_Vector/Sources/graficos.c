@@ -1,9 +1,12 @@
-#include "juego.h"
-
+#include "../Headers/Grafica.h"
+#include "../Headers/Sistema.h"
+#include <stdio.h>
+#include <stdlib.h>
 void grafica(int opc)
 {
-    if(opc == 0)
+    switch(opc)
     {
+    case 0:
         printf("\n\t***************************************************************************");
         printf("\n\t///////////////////////////////////////////////////////////////////////////");
         printf("\n\t**                                                                       **");
@@ -13,11 +16,9 @@ void grafica(int opc)
         printf("\n\t\t\t - DELGADO MAILEN ");
         printf("\n\t\t\t - MAMANI LUCAS ");
         printf("\n\t\t\t - LOPEZ MANUEL ");
+        break;
 
-    }
-
-    if(opc == 1) //victoria
-    {
+    case 1: //victoria
         limpiarPantalla();
         printf("\n\t************************************************************************************************");
         printf("\n\t////////////////////////////////////////////////////////////////////////////////////////////////");
@@ -36,9 +37,8 @@ void grafica(int opc)
         printf("\n\t////////////////////////////////////////////////////////////////////////////////////////////////");
         printf("\n\t************************************************************************************************\n\n\n");
         printf("\t\t\t Felicitaciones. Te has impuesto con maestria ante la IA.\n\n");
-    }
-    if(opc == 2) //Derrota
-    {
+        break;
+    case 2://Derrota
         limpiarPantalla();
         printf("\n\t*****************************************************************************************");
         printf("\n\t/////////////////////////////////////////////////////////////////////////////////////////");
@@ -58,10 +58,8 @@ void grafica(int opc)
         printf("\n\t/////////////////////////////////////////////////////////////////////////////////////////");
         printf("\n\t*****************************************************************************************\n\n\n");
         printf("\t\t\t Tu oponente se impone. Vuelve a intentarlo.\n\n");
-    }
-
-    if(opc == 3) //Empate
-    {
+        break;
+    case 3: //Empate
         limpiarPantalla();
         printf("\n\t***************************************************************************");
         printf("\n\t///////////////////////////////////////////////////////////////////////////");
@@ -81,10 +79,8 @@ void grafica(int opc)
         printf("\n\t///////////////////////////////////////////////////////////////////////////");
         printf("\n\t***************************************************************************\n\n\n");
         printf("\t\t\t Igualados. Nadie pudo vencer.\n\n");
-    }
-
-    if(opc == 4) //Ranking
-    {
+        break;
+    case 4: //Ranking
         limpiarPantalla();
         printf("\n\t*****************************************************************************************");
         printf("\n\t/////////////////////////////////////////////////////////////////////////////////////////");
@@ -101,5 +97,54 @@ void grafica(int opc)
         printf("\n\t/////////////////////////////////////////////////////////////////////////////////////////");
         printf("\n\t*****************************************************************************************\n\n\n");
         printf("\t\t\t Cada punto cuenta, cada victoria te acerca a la cima.\n\n");
+        break;
+
+    case 5:
+        puts("=============== MENU ===============");
+        printf("%c) Jugar.\n",CONDJUGAR);
+        printf("%c) Ver Ranking.\n",CONDVERRANKING);
+        printf("%c) Salir.\n",CONDSALIR);
+        puts("Ingrese solo un Caracter");
+        break;
+    case 6:
+        printf("\n\t\t ========================================================");
+        printf("\n\t\t|\t\t   INGRESO DE JUGADOR                    |");
+        printf("\n\t\t|\t\t   --------------------                  |");
+        printf("\n\t\t|\t Ingrese su nombre o 0 para volver al menu.      |");
+        printf("\n\t\t ========================================================\n\n");
+        printf("Jugador: ");
+        break;
+    case 7:
+        printf("\n\t\t ========================================================");
+        printf("\n\t\t|\t\t   DIFICULTAD                   |");
+        printf("\n\t\t|\t\t   --------------------                  |");
+        printf("\n\t\t|\t [1] FACIL     |");
+        printf("\n\t\t|\t [2] MEDIO     |");
+        printf("\n\t\t|\t [3] DIFICIL    |");
+        printf("\n\t\t ========================================================\n\n");
+        printf("Seleccione nivel de dificultad: ");
+        break;
     }
+}
+int menu(char opcion)
+{
+    system("cls");
+    switch (opcion)
+    {
+    case CONDJUGAR:
+        puts("Estas Jugando");
+        iniciarJuego();
+        break;
+    case CONDVERRANKING:
+        puts("Estas viendo el Ranking");
+        break;
+    case CONDSALIR:
+        puts("Saliendo del programa...");
+        break;
+    default:
+        puts("Opcion no valida, por favor intente de nuevo.");
+    }
+    system("pause");
+    system("cls");
+    return opcion;
 }

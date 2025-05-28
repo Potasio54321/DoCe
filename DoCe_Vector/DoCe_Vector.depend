@@ -29,3 +29,72 @@
 	"../Headers/PilaEstatica.h"
 	<string.h>
 
+1748469763 source:c:\users\nuevo usuario\documents\c\algoritmos\tp\doce\doce_vector\main.c
+	<stdio.h>
+	<stdlib.h>
+	"Headers/Grafica.h"
+	"Headers/Sistema.h"
+
+1748468235 c:\users\nuevo usuario\documents\c\algoritmos\tp\doce\doce_vector\headers\menu.h
+	<stddef.h>
+
+1748456328 source:c:\users\nuevo usuario\documents\c\algoritmos\tp\doce\doce_vector\sources\funciones.c
+	"..\Headers\funcioneslista.h"
+
+1748453842 c:\users\nuevo usuario\documents\c\algoritmos\tp\doce\doce_vector\headers\funcioneslista.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1748471260 source:c:\users\nuevo usuario\documents\c\algoritmos\tp\doce\doce_vector\sources\graficos.c
+	"../Headers/Grafica.h"
+	"../Headers/Sistema.h"
+	<stdio.h>
+	<stdlib.h>
+
+1748470723 c:\users\nuevo usuario\documents\c\algoritmos\tp\doce\doce_vector\headers\juego.h
+	<stdlib.h>
+	<stdio.h>
+	"funcioneslista.h"
+	"Sistema.h"
+
+1748471082 c:\users\nuevo usuario\documents\c\algoritmos\tp\doce\doce_vector\headers\sistema.h
+	<stdlib.h>
+	<stdio.h>
+
+1748467072 source:c:\users\nuevo usuario\documents\c\algoritmos\tp\doce\doce_vector\sources\logica.c
+	"../Headers/Logica.h"
+	<time.h>
+
+1748467525 c:\users\nuevo usuario\documents\c\algoritmos\tp\doce\doce_vector\headers\logica.h
+	"PilaEstatica.h"
+
+1748467897 c:\users\nuevo usuario\documents\c\algoritmos\tp\doce\doce_vector\headers\pilaestatica.h
+	<stdio.h>
+	<stdlib.h>
+
+1748468235 source:c:\users\nuevo usuario\documents\c\algoritmos\tp\doce\doce_vector\sources\menu.c
+	"..\Headers\Menu.h"
+	"..\Headers\Logica.h"
+	<string.h>
+	<stdlib.h>
+	<stdio.h>
+
+1748453842 source:c:\users\nuevo usuario\documents\c\algoritmos\tp\doce\doce_vector\sources\pilaestatica.c
+	"../Headers/PilaEstatica.h"
+	<string.h>
+
+1748471509 source:c:\users\nuevo usuario\documents\c\algoritmos\tp\doce\doce_vector\sources\sistema.c
+	"..\Headers\Sistema.h"
+	<string.h>
+	<ctype.h>
+
+1748475090 source:c:\users\nuevo usuario\documents\c\algoritmos\tp\doce\doce_vector\sources\juego.c
+	"..\Headers\juego.h"
+	"..\Headers\PilaEstatica.h"
+	"..\Headers\Menu.h"
+	"..\Headers\Grafica.h"
+	<time.h>
+
+1748470556 c:\users\nuevo usuario\documents\c\algoritmos\tp\doce\doce_vector\headers\grafica.h
+

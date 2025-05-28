@@ -1,12 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "Headers/Menu.h"
+#include "Headers/Grafica.h"
+#include "Headers/Sistema.h"
 int main()
 {
     char Input[3];
-    mostrarMenu();
     do
     {
+        grafica(5);
         registrarInput(Input,sizeof(Input),condIgual3);
     } while (menu(Input[0])!=CONDSALIR);
 

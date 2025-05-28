@@ -20,7 +20,7 @@ int partida()
         //Hacen Cosas;
         puntajeJugador++;
     }
-    ///Esto es para Mostrar Lo que tiene 
+    ///Esto es para Mostrar Lo que tiene
     //Se borrara Luego
     int i=0;
     char aux;
@@ -37,19 +37,4 @@ int partida()
 //d -2
 //e repite
 //f espejo
-int cargaMazo(tPila *mazo)
-{
-    char cartas[41]={"aaaaaabbbbbbbbbbccccccccddddddeeeeeeffff"};
-    unsigned cantCartas=40;
-    unsigned cartaElegida;
-    srand(time(NULL));
-    while(cantCartas>0)
-    {
-        cartaElegida=rand()%cantCartas;
-        if(!ponerEnPila(mazo,cartas+cartaElegida,sizeof(char)))
-            return 0;
-        cantCartas--;
-        cartas[cartaElegida]=cartas[cantCartas];
-    }
-    return 1;
-}
+

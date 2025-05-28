@@ -1,4 +1,4 @@
-#include "funcioneslista.h"
+#include "..\Headers\funcioneslista.h"
 #define SINMEMORIA 0
 #define LISTAVACIA 0
 #define POSINVALIDA 0
@@ -63,7 +63,7 @@ int ponerPosLista (tLista *pl, const void *dt, unsigned tam, unsigned pos){
             pos--;
         }
 
-        if(pos){///VERIFICAR QUE SE HAYA ENCONTRADO LA POSICIÓN
+        if(pos){///VERIFICAR QUE SE HAYA ENCONTRADO LA POSICIï¿½N
             return POSINVALIDA;
         }
 
@@ -116,7 +116,7 @@ int ponerOrdenLista(tLista *pl, const void *dt, unsigned tam, int (*cmp)(const v
     while(*pl && (rc=cmp(dt,(*pl)->info))>0){
         pl=&(*pl)->sig;
     }
-    ///Si rc = 0 es pq comparó con un NULL (es el 1ero) o pq es igual
+    ///Si rc = 0 es pq comparï¿½ con un NULL (es el 1ero) o pq es igual
     ///si es el primero -> la lista no existe y el resultado es 0
     ///para que sea dupli: la lista existe (no es el primero) y rc es 0
     if(*pl && !rc){ ///SI ESTA DUPLICADO (RC=0) SIEMPRE EXISTE LA LISTA: SINO LA COMPARACION ES CONTRA NULL
@@ -153,7 +153,7 @@ int sacarElemLista (tLista *pl, void *dt, unsigned tam, int (*cmp)(const void*, 
         pl = &(*pl)->sig;
     }
 
-    if(!*pl){///SI LA LISTA NO EXISTE ENTONCES ES QUE NO LO ENCONTRÓ NO NECESITA EL RC.
+    if(!*pl){///SI LA LISTA NO EXISTE ENTONCES ES QUE NO LO ENCONTRï¿½ NO NECESITA EL RC.
         return NOENCONTRADO;
     }
 

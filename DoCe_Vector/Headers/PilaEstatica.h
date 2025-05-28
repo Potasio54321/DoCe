@@ -2,8 +2,8 @@
 #define PILA_ESTATICA_H_INCLUDED
 #include <stdio.h>
 #include <stdlib.h>
-
 #define CANTTAMMAX 40+40*sizeof(size_t)
+
 ///Metodo Estatico
 typedef struct
 {
@@ -12,6 +12,7 @@ typedef struct
     size_t tope;
 }
 tPila;
+
 void crearPila(tPila* pPila);
 void vaciarPila(tPila*pPila);
 
