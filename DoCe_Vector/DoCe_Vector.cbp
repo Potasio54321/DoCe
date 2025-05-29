@@ -31,8 +31,24 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
-		<Unit filename="Headers/Menu.h" />
-		<Unit filename="Sources/Menu.c">
+		<Unit filename="Headers/Grafica.h" />
+		<Unit filename="Headers/PilaEstatica.h" />
+		<Unit filename="Headers/Sistema.h" />
+		<Unit filename="Headers/funcioneslista.h" />
+		<Unit filename="Headers/juego.h" />
+		<Unit filename="Sources/PilaEstatica.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Sources/Sistema.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Sources/funciones.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Sources/graficos.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Sources/juego.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="main.c">
