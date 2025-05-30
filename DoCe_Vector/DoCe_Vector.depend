@@ -38,25 +38,22 @@
 1748468235 c:\users\nuevo usuario\documents\c\algoritmos\tp\doce\doce_vector\headers\menu.h
 	<stddef.h>
 
-1748456328 source:c:\users\nuevo usuario\documents\c\algoritmos\tp\doce\doce_vector\sources\funciones.c
+1748634234 source:c:\users\nuevo usuario\documents\c\algoritmos\tp\doce\doce_vector\sources\funciones.c
 	"..\Headers\funcioneslista.h"
 
-1748453842 c:\users\nuevo usuario\documents\c\algoritmos\tp\doce\doce_vector\headers\funcioneslista.h
+1748634261 c:\users\nuevo usuario\documents\c\algoritmos\tp\doce\doce_vector\headers\funcioneslista.h
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
 
-1748471260 source:c:\users\nuevo usuario\documents\c\algoritmos\tp\doce\doce_vector\sources\graficos.c
+1748637166 source:c:\users\nuevo usuario\documents\c\algoritmos\tp\doce\doce_vector\sources\graficos.c
 	"../Headers/Grafica.h"
 	"../Headers/Sistema.h"
 	<stdio.h>
 	<stdlib.h>
 
-1748470723 c:\users\nuevo usuario\documents\c\algoritmos\tp\doce\doce_vector\headers\juego.h
-	<stdlib.h>
-	<stdio.h>
-	"funcioneslista.h"
-	"Sistema.h"
+1748635545 c:\users\nuevo usuario\documents\c\algoritmos\tp\doce\doce_vector\headers\juego.h
+	"PilaEstatica.h"
 
 1748471082 c:\users\nuevo usuario\documents\c\algoritmos\tp\doce\doce_vector\headers\sistema.h
 	<stdlib.h>
@@ -84,17 +81,29 @@
 	"../Headers/PilaEstatica.h"
 	<string.h>
 
-1748471509 source:c:\users\nuevo usuario\documents\c\algoritmos\tp\doce\doce_vector\sources\sistema.c
+1748475365 source:c:\users\nuevo usuario\documents\c\algoritmos\tp\doce\doce_vector\sources\sistema.c
 	"..\Headers\Sistema.h"
 	<string.h>
 	<ctype.h>
 
-1748475090 source:c:\users\nuevo usuario\documents\c\algoritmos\tp\doce\doce_vector\sources\juego.c
+1748637079 source:c:\users\nuevo usuario\documents\c\algoritmos\tp\doce\doce_vector\sources\juego.c
+	<stdlib.h>
+	<stdio.h>
+	<string.h>
+	<time.h>
 	"..\Headers\juego.h"
-	"..\Headers\PilaEstatica.h"
 	"..\Headers\Menu.h"
 	"..\Headers\Grafica.h"
-	<time.h>
+	"..\Headers\ListaCircular.h"
+	"..\Headers\Sistema.h"
 
-1748470556 c:\users\nuevo usuario\documents\c\algoritmos\tp\doce\doce_vector\headers\grafica.h
+1748636924 c:\users\nuevo usuario\documents\c\algoritmos\tp\doce\doce_vector\headers\grafica.h
+
+1748636213 source:c:\users\nuevo usuario\documents\c\algoritmos\tp\doce\doce_vector\sources\listacircular.c
+	"../Headers/ListaCircular.h"
+	<stdlib.h>
+	<string.h>
+
+1748635751 c:\users\nuevo usuario\documents\c\algoritmos\tp\doce\doce_vector\headers\listacircular.h
+	<stddef.h>
 

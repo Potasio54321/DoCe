@@ -196,16 +196,17 @@ int sacarElemOrdenadoLista (tLista *pl, void *dt, unsigned tam, int (*cmp)(const
 }
 
 
-void recorrerLista(tLista *pl, void (*accion)(void*,void*), void*param){
+int recorrerLista(tLista *pl, int (*accion)(void*,void*), void*param){
     if(!*pl){
-        return;
+        return -1;
     }
 
     while(*pl){
-        accion((*pl)->info,param);
+        if (accion((*pl)->info,param))
+            return 0;
         pl = &(*pl)->sig;
     }
-
+    return 1;
 }
 
 void mostrarENTEROLista(void *pl,void*param){

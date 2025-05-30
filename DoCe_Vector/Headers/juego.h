@@ -1,25 +1,41 @@
 #ifndef JUEGO_H_INCLUDED
 #define JUEGO_H_INCLUDED
-#include <stdlib.h>
-#include <stdio.h>
-#include "funcioneslista.h"
-#include "Sistema.h"
+#include "PilaEstatica.h"
+//Dificultades
+#define FACIL 1
+#define NORMAL 2
+#define DIFICIL 3
+//Estado PostJugadas
+#define JUGOESPEJO 2
 #define GANAR 1
 #define PERDER 0
+#define TURNONORMAL -1
+//Cartas
+#define SUMA2 'a'
+#define SUMA1 'b'
+#define RESTA1 'c'
+#define RESTA2 'd'
+#define REPITE 'e'
+#define ESPEJO 'f'
 
 typedef struct{
     char nombre[20];
     int puntos;
-    char mazo[4];  ///preguntar
+    char mazo[4];
 }tJugador;
-
 typedef struct{
     char nombre[20];
     char cartaJugada;
     int turno;
 }tTurno;
 typedef int (*ACT)(void*,void*);
+typedef struct{
+    tJugador* jugador;
+    tJugador* oponente;
+    tPila* mazo;
+    ACT decision;
+}tRonda;
+
 int iniciarJuego();
-int jugar(tLista *list_turnos, tJugador *jugador, tJugador *maquina);
 
 #endif // JUEGO_H_INCLUDED

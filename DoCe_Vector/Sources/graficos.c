@@ -6,7 +6,7 @@ void grafica(int opc)
 {
     switch(opc)
     {
-    case 0:
+    case INTRODUCCION:
         printf("\n\t***************************************************************************");
         printf("\n\t///////////////////////////////////////////////////////////////////////////");
         printf("\n\t**                                                                       **");
@@ -18,7 +18,7 @@ void grafica(int opc)
         printf("\n\t\t\t - LOPEZ MANUEL ");
         break;
 
-    case 1: //victoria
+    case VICTORIA: //victoria
         limpiarPantalla();
         printf("\n\t************************************************************************************************");
         printf("\n\t////////////////////////////////////////////////////////////////////////////////////////////////");
@@ -38,7 +38,7 @@ void grafica(int opc)
         printf("\n\t************************************************************************************************\n\n\n");
         printf("\t\t\t Felicitaciones. Te has impuesto con maestria ante la IA.\n\n");
         break;
-    case 2://Derrota
+    case DERROTA://Derrota
         limpiarPantalla();
         printf("\n\t*****************************************************************************************");
         printf("\n\t/////////////////////////////////////////////////////////////////////////////////////////");
@@ -59,33 +59,20 @@ void grafica(int opc)
         printf("\n\t*****************************************************************************************\n\n\n");
         printf("\t\t\t Tu oponente se impone. Vuelve a intentarlo.\n\n");
         break;
-    case 3: //Empate
+ case MAZOMEZCLADO: // Mazo mezclado
         limpiarPantalla();
-        printf("\n\t***************************************************************************");
-        printf("\n\t///////////////////////////////////////////////////////////////////////////");
-        printf("\n\t**                                                                       **");
-        printf("\n\t**     ____    __    __    ______       __       _________    ____       **");
-        printf("\n\t**    |   _|| |  \\  /  || |   _  \\     /  \\\\    |___  ___|| |  __||      **");
-        printf("\n\t**     ____    __    __    ______       __       _________    ____       **");
-        printf("\n\t**    |   _|| |  \\  /  || |   _  \\     /  \\\\    |___  ___|| |  __||      **");
-        printf("\n\t**     ____    __    __    ______       __       _________    ____       **");
-        printf("\n\t**    |   _|| |  \\  /  || |   _  \\     /  \\\\    |___  ___|| |  __||      **");
-        printf("\n\t**    |  |_   |   \\/   || |  |_|  ||  /    \\\\      |  ||    |  |_        **");
-        printf("\n\t**    |   _|| |        || |   ___//  / /__\\ \\\\     |  ||    |  __||      **");
-        printf("\n\t**    |  |_   |  |\\/|  || |  |      /   __   \\\\    |  ||    |  |_        **");
-        printf("\n\t**    |____|| |__|  |__|| |__|     /___/  \\___\\\\   |__||    |____||      **");
-        printf("\n\t**                                                                       **");
-        printf("\n\t**                                                                       **");
-        printf("\n\t///////////////////////////////////////////////////////////////////////////");
-        printf("\n\t***************************************************************************\n\n\n");
-        printf("\t\t\t Igualados. Nadie pudo vencer.\n\n");
+        printf("\n\t*********************************************************************************");
+        printf("\n\t/////////////////////////////////////////////////////////////////////////////////");
+        printf("\n\t**                        ¡El mazo ha sido mezclado!                          **");
+        printf("\n\t/////////////////////////////////////////////////////////////////////////////////");
+        printf("\n\t*********************************************************************************\n\n\n");
         break;
-    case 4: //Ranking
+
+    case RANKING: //Ranking
         limpiarPantalla();
         printf("\n\t*****************************************************************************************");
         printf("\n\t/////////////////////////////////////////////////////////////////////////////////////////");
         printf("\n\t**                                                                                     **");
-
         printf("\n\t**     _____          __        __     __     __   __     __   __     __    _______    **");
         printf("\n\t**    ||  _  \\       /  \\\\     |  \\   |  ||  |  | /  // |  || |  \\   |  || /   ____||  **");
         printf("\n\t**    || |_| ||     /    \\\\    |   \\  |  ||  |  |/  //  |  || |   \\  |  || |  | ____   **");
@@ -98,15 +85,16 @@ void grafica(int opc)
         printf("\n\t*****************************************************************************************\n\n\n");
         printf("\t\t\t Cada punto cuenta, cada victoria te acerca a la cima.\n\n");
         break;
-
-    case 5:
+    case MENU:
+        limpiarPantalla();
         puts("=============== MENU ===============");
         printf("%c) Jugar.\n",CONDJUGAR);
         printf("%c) Ver Ranking.\n",CONDVERRANKING);
         printf("%c) Salir.\n",CONDSALIR);
         puts("Ingrese solo un Caracter");
         break;
-    case 6:
+    case INGRESOJUGADOR:
+        limpiarPantalla();
         printf("\n\t\t ========================================================");
         printf("\n\t\t|\t\t   INGRESO DE JUGADOR                    |");
         printf("\n\t\t|\t\t   --------------------                  |");
@@ -114,7 +102,9 @@ void grafica(int opc)
         printf("\n\t\t ========================================================\n\n");
         printf("Jugador: ");
         break;
-    case 7:
+
+    case INGRESODIFICULTAD:
+        limpiarPantalla();
         printf("\n\t\t ========================================================");
         printf("\n\t\t|\t\t   DIFICULTAD                   |");
         printf("\n\t\t|\t\t   --------------------                  |");
@@ -123,6 +113,18 @@ void grafica(int opc)
         printf("\n\t\t|\t [3] DIFICIL    |");
         printf("\n\t\t ========================================================\n\n");
         printf("Seleccione nivel de dificultad: ");
+        break;
+    case JUEGAJUGADOR:
+        limpiarPantalla();
+        printf("\nTurno de Usted.\n");
+        printf("-------------------------\n");
+        printf("=====================================================\n");
+        break;
+    case JUEGAMAQUINA:
+        limpiarPantalla();
+        printf("\nTurno de la Maquina.\n");
+        printf("-------------------------\n");
+        printf("=====================================================\n");
         break;
     }
 }

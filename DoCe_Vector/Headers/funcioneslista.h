@@ -24,7 +24,7 @@ int ponerOrdenLista(tLista *pl, const void *dt, unsigned tam, int (*cmp)(const v
 int sacarElemLista (tLista *pl, void *dt, unsigned tam, int (*cmp)(const void*, const void*));
 int sacarElemOrdenadoLista (tLista *pl, void *dt, unsigned tam, int (*cmp)(const void*, const void*));
 
-void recorrerLista(tLista *pl, void (*accion)(void*,void*), void*param);
+int recorrerLista(tLista *pl, int (*accion)(void*,void*), void*param);
 void mostrarENTEROLista(void *pl,void*param);
 
 

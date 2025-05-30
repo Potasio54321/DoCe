@@ -1,117 +1,145 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <time.h>
 #include "..\Headers\juego.h"
-#include "..\Headers\PilaEstatica.h"
 #include "..\Headers\Menu.h"
 #include "..\Headers\Grafica.h"
-#include <time.h>
+#include "..\Headers\ListaCircular.h"
+#include "..\Headers\Sistema.h"
+int iniciarJuego();
+int jugar(tLista360 *listaTurnos, tJugador *jugador, tJugador *maquina);
+int VerGanador(const tJugador *jugador,const tJugador *maquina);
+//Funciones Mostrar
+void mostrarUltimaCartaJugadaJugador(const tJugador* jugador);
+void mostrarPuntajeJugador(const tJugador* jugador);
+void mostrarJugadorCartas(const tJugador *jugador);
+//Funciones Mazo
 void dar3CartasJugador(tJugador* jugador,tPila* mazo);
 void darCartaJugador(tJugador* jugador,tPila* mazo);
-int elegirCarta(void* Jugador,void* Maquina);
-int jugarTurno2(tLista *list_turnos,tJugador *juega, tJugador *oponente,ACT decision);
-int strAInt(int *numero,const char* str);
-void aplicarEfecto(tJugador *aplica, tJugador *aplicado);
-int finalizaJuego(tJugador *jugador, tJugador *maquina, int resultado);
-void mostrarJugadorCartas(tJugador *jugador);
-int ingresoJugador(tJugador *jugador);
-void selectdificultad(int *d);
 int cargarMazo(tPila *mazo);
+//Funciones Decision
+int elegirCarta(void* Jugador,void* Maquina);
 int rand3(void* Maquina,void* Jugador);
+//Funciones tRonda
+void crearRondas(tLista360* rondas,tJugador* jugador,tJugador* maquina,tPila* mazo);
+void crearRonda(tRonda* ronda,tJugador* jugador,tJugador* oponente,tPila* mazo,ACT decision);
+int jugarRondaConLista(void* Ronda,void* ListaINFO);
+void rondaDarCarta(const tRonda* ronda);
+int rondaFinalizoJuego(const tRonda* ronda);
+void rondaAplicarEfecto(const tRonda* ronda);
+void aplicarEfecto(tJugador *aplica, tJugador *aplicado);
+//Funciones Ingreso
+ACT selecionarDificultad();
+int ingresoJugador(tJugador *jugador);
 
 int iniciarJuego()
 {
     int resultado;
     tJugador jugador;
     tJugador maquina={"Maquina",0};
-    tLista list_turnos;
+    tLista360 listaTurnos;
     //tConfig config;
     //cargarConfig(NOMBRE_ARCH_CONFIG, &config);
 
     if(!ingresoJugador(&jugador)) //si no se ingreso jugador vuelve al menu
         return 0;
 
-    // Inicializa la semilla para los numeros aleatorios
-    srand(time(NULL));
     //Partida
-    crearLista(&list_turnos);
-    resultado = jugar(&list_turnos, &jugador, &maquina);
-    if(resultado == GANAR)
+    crearLista360(&listaTurnos);
+    if((resultado= jugar(&listaTurnos, &jugador, &maquina)) == GANAR)
+    {
         grafica(1);
+        //generarInforme(&listaTurnos,jugador,maquina);// generarInforme
+                                                       //Arg 1 lista, arg2 ganador, arg3 perdedor
+    }
     else
+    {
         grafica(2);
-    //generarInforme(&list_turnos, jugador, ganador, puntosIA);
-    //generarInforme(&list_turnos,jugador,maquina);
-    vaciarLista(&list_turnos);
+        //generarInforme(&listaTurnos,maquina,jugador);// generarInforme
+                                                       //Arg 1 lista, arg2 ganador, arg3 perdedor
+    }
+    //generarInforme(&listaTurnos, jugador, ganador, puntosIA);
+
+    //vaciarLista360(&listaTurnos);
     return 1;
 }
-int jugar(tLista *list_turnos, tJugador *jugador, tJugador *maquina)
+int jugar(tLista360 *listaTurnos, tJugador *jugador, tJugador *maquina)
 {
-    int resultado;
-    int juega = rand() % 2,//se sortea quien empieza, si sale 0 empieza la maquina, si sale 1 empieza el humano.
-        dificultad;
+    int resultado=-1;
     tPila mazo;
-
-    selectdificultad(&dificultad);
-    puts("Presione Cualquier tecla para continuar");
-
-    ///inicializa el mezclado de cartas
-    if (juega == 1)
-    {
-        printf("\nEmpezas vos\n");
-    }
-    else
-    {
-        printf("\nEmpieza la IA.\n");
-    }
-    printf("-------------------------\n");
-    printf("=====================================================\n");
-    pausarPantalla();
-    limpiarPantalla();
-
-    ///MEZCLAR MAZO
-    ///REPARTIR 3 CARTAS
-
-    ///REPARTIR CARTAS A LA MAQUINA
+    tLista360 rondas;
+    srand(time(NULL));
     crearPila(&mazo);
-    cargarMazo(&mazo);
-    dar3CartasJugador(jugador,&mazo);
-    dar3CartasJugador(maquina,&mazo);
-    jugador->puntos=10;
+    crearLista360(&rondas);
+    crearRondas(&rondas,jugador,maquina,&mazo);
+
+    jugador->puntos=10;    //Opcional solo para testeo
     do
     {
-        if(pilaVacia(&mazo))
-        {
-            cargarMazo(&mazo);
-        }
-        //Cambiar
-
-        //Funcion Jugador Mostrar Cartas
-        mostrarJugadorCartas(jugador);
-        //Funcion Jugador Mostrar Puntaje
-        printf("\n TU PUNTAJE: %d",jugador->puntos);
-        printf("\n PUNTAJE DE LA MAQUINA: %d",maquina->puntos);
-        if(juega==1)//se juega el turno enviando con Juega qui�n juega.
-        {
-            puts("\nJuegas vos");
-            resultado=jugarTurno2(list_turnos,jugador, maquina,elegirCarta);//Juega el que toca
-            darCartaJugador(jugador,&mazo);//Saca una Carta
-        }
-        else
-        {
-            puts("\nJuega La Maquina");
-            resultado=jugarTurno2(list_turnos,maquina, jugador,rand3);
-            darCartaJugador(maquina,&mazo);
-            printf("Carta jugada Por la maquina %c\n",maquina->mazo[3]);
-        }
-        system("pause");
-        //resultado = jugarTurno(list_turnos,jugador, maquina, &mazo,opc, dificultad);
-        if((resultado=finalizaJuego(jugador, maquina, resultado)) == -1) ///Debe intercambiar quien juega la proxima vez
-        {
-            juega++;
-            juega%=2;///si resultado==2 entonces NO CAMBIA quien juega pq eligio una carta de repetir turno
-        }
-        limpiarPantalla();
+        if(!recorrerLista360(&rondas,jugarRondaConLista,listaTurnos))
+            resultado=VerGanador(jugador, maquina);
     }while (resultado != 0 && resultado != 1);
 
     return resultado;
+}
+int VerGanador(const tJugador *jugador,const tJugador *maquina)
+{
+    //luego del turno se verifica si hay un ganador
+    if (jugador->puntos >=12) //Si se gano en este turno, verifica quien gano
+    {
+        printf("%s HA PERDIDO\n%s HA GANADO\n",maquina->nombre,jugador->nombre);
+        system("pause");
+        return 1;
+    }
+    printf("%s HA PERDIDO\n%s HA GANADO\n",jugador->nombre,maquina->nombre);
+    system("pause");
+    return 0;
+}
+//Funciones Mostrar
+void mostrarUltimaCartaJugadaJugador(const tJugador* jugador)
+{
+    char Cartas[6][7]={"+2","+1","-1","-2","Repite","Espejo"};
+    printf("Carta jugada Por %s es %s\n",jugador->nombre,Cartas[jugador->mazo[3]-'a']);
+}
+void mostrarPuntajeJugador(const tJugador* jugador)
+{
+    printf("%s Tiene %d Puntos\n",jugador->nombre,jugador->puntos);
+}
+void mostrarJugadorCartas(const tJugador *jugador)
+{
+    char Cartas[6][7]={"+2","+1","-1","-2","Repite","Espejo"};
+    int i;
+    printf("\n TUS CARTAS SON:\n");
+    for(i=0;i<3;i++)
+    {
+        printf("%d) %s ",i+1,Cartas[jugador->mazo[i]-'a']);
+    }
+    puts("");
+}
+//Funciones Mazo
+void dar3CartasJugador(tJugador* jugador,tPila* mazo)
+{
+    char* cartaJugada=jugador->mazo;
+    char* ultimaCarta=jugador->mazo+3;
+    if(pilaVacia(mazo))
+        cargarMazo(mazo);
+    while (cartaJugada<ultimaCarta)
+    {
+        sacarDePila(mazo,cartaJugada,sizeof(char));
+        cartaJugada++;
+    }
+}
+void darCartaJugador(tJugador* jugador,tPila* mazo)
+{
+    char* cartaJugada=jugador->mazo;
+    char* ultimaCarta=jugador->mazo+3;
+    if(pilaVacia(mazo))
+        cargarMazo(mazo);
+    while (cartaJugada<ultimaCarta&&*cartaJugada!='\0')
+        cartaJugada++;
+    if(cartaJugada!=ultimaCarta&&!*cartaJugada)
+        sacarDePila(mazo,cartaJugada,sizeof(char));
 }
 int cargarMazo(tPila *mazo)
 {
@@ -127,55 +155,27 @@ int cargarMazo(tPila *mazo)
         cantCartas--;
         cartas[cartaElegida]=cartas[cantCartas];
     }
+    grafica(MAZOMEZCLADO);
+    pausarPantalla();
     return 1;
 }
-int jugarTurno2(tLista *list_turnos,tJugador *juega, tJugador *oponente,ACT decision)
-{
-    int cartaJugada=decision(juega,oponente);
-    aplicarEfecto(juega,oponente);
-    //informarLista(list_turnos,juega);
-    if(cartaJugada == 'e'){
-        return 2;
-    }
-    return -1;
-}
-void dar3CartasJugador(tJugador* jugador,tPila* mazo)
-{
-    char* cartaJugada=jugador->mazo;
-    char* ultimaCarta=jugador->mazo+3;
-    while (cartaJugada<ultimaCarta)
-    {
-        sacarDePila(mazo,cartaJugada,sizeof(char));
-        cartaJugada++;
-    }
-}
-void darCartaJugador(tJugador* jugador,tPila* mazo)
-{
-    char* cartaJugada=jugador->mazo;
-    char* ultimaCarta=jugador->mazo+3;
-    while (cartaJugada<ultimaCarta&&*cartaJugada!='\0')
-    {
-        cartaJugada++;
-    }
-    if(cartaJugada!=ultimaCarta&&!*cartaJugada)
-    {
-        sacarDePila(mazo,cartaJugada,sizeof(char));
-    }
-}
+//Funciones Decision
 int elegirCarta(void* Jugador,void* Maquina)
 {
     tJugador* jugador=Jugador;
-    tJugador* maquina=Maquina;
+    const tJugador* maquina=Maquina;
     int selecion;
     int entradaValida;
     char input[3];
+    grafica(JUEGAJUGADOR);
+    pausarPantalla();
     do
     {
         limpiarPantalla();
         mostrarJugadorCartas(jugador);
-        printf("\n TU PUNTAJE: %d",jugador->puntos);
-        printf("\n PUNTAJE DE LA MAQUINA: %d",maquina->puntos);
-        printf("\n%s Ingrese su carta a Jugar: ", jugador->nombre);
+        mostrarPuntajeJugador(jugador);
+        mostrarPuntajeJugador(maquina);
+        printf("%s Ingrese su carta a Jugar: ", jugador->nombre);
         registrarInput(input,sizeof(input),condIgual3);
         if((entradaValida=strAInt(&selecion,input))!=1&&!(entradaValida=rango(selecion,1,3)))
         {
@@ -190,10 +190,78 @@ int elegirCarta(void* Jugador,void* Maquina)
 int rand3(void* Maquina,void* Jugador)
 {
     tJugador* maquina=Maquina;
+    const tJugador* jugador=Jugador;
     int selecion=rand()%3;
+    grafica(JUEGAMAQUINA);
+    pausarPantalla();
+    limpiarPantalla();
+    mostrarJugadorCartas(jugador);
+    mostrarPuntajeJugador(jugador);
+    mostrarPuntajeJugador(maquina);
     maquina->mazo[3]=maquina->mazo[selecion];
     maquina->mazo[selecion]='\0';
+    mostrarUltimaCartaJugadaJugador(maquina);
+    pausarPantalla();
     return maquina->mazo[3];
+}
+//Funciones Ronda
+void crearRondas(tLista360* rondas,tJugador* jugador,tJugador* maquina,tPila* mazo)
+{
+    tJugador*primero=maquina;
+    ACT decisionPrimero=selecionarDificultad();
+    tJugador*segundo=jugador;
+    ACT decisionSegundo=elegirCarta;
+    ACT CAMBIO;
+    tRonda rondaAct;
+    if(rand()%2)
+    {
+        CAMBIO=decisionPrimero;
+        primero=jugador;
+        decisionPrimero=decisionSegundo;
+        segundo=maquina;
+        decisionSegundo=CAMBIO;
+    }
+    crearRonda(&rondaAct,primero,segundo,mazo,decisionPrimero);
+    ponerEnLista360Fin(rondas,&rondaAct,sizeof(rondaAct));
+    crearRonda(&rondaAct,segundo,primero,mazo,decisionSegundo);
+    ponerEnLista360Fin(rondas,&rondaAct,sizeof(rondaAct));
+    dar3CartasJugador(primero,mazo);
+    dar3CartasJugador(segundo,mazo);
+}
+void crearRonda(tRonda* ronda,tJugador* jugador,tJugador* oponente,tPila* mazo,ACT decision)
+{
+    ronda->jugador=jugador;
+    ronda->oponente=oponente;
+    ronda->mazo=mazo;
+    ronda->decision=decision;
+}
+int jugarRondaConLista(void* Ronda,void* ListaINFO)
+{
+    tRonda* ronda=Ronda;
+    //tLista360* listaInfo=ListaINFO;
+    int cartaElegida;
+    do
+    {
+        cartaElegida=ronda->decision(ronda->jugador,ronda->oponente);
+        rondaAplicarEfecto(ronda);
+        rondaDarCarta(ronda);
+    } while (cartaElegida=='e');
+    //informarTurno(listaInfo,ronda);//HACER
+    if(rondaFinalizoJuego(ronda))
+        return 0;
+    return cartaElegida;
+}
+void rondaDarCarta(const tRonda* ronda)
+{
+    darCartaJugador(ronda->jugador,ronda->mazo);
+}
+int rondaFinalizoJuego(const tRonda* ronda)
+{
+    return ronda->jugador->puntos>=12;
+}
+void rondaAplicarEfecto(const tRonda* ronda)
+{
+    aplicarEfecto(ronda->jugador,ronda->oponente);
 }
 void aplicarEfecto(tJugador *aplica, tJugador *aplicado)
 {
@@ -237,38 +305,7 @@ void aplicarEfecto(tJugador *aplica, tJugador *aplicado)
     if(aplicado->puntos<0)
         aplicado->puntos=0;
 }
-int finalizaJuego(tJugador *jugador, tJugador *maquina, int resultado)
-{
-    //luego del turno se verifica si hay un ganador
-    if (jugador->puntos >=12) //Si se gano en este turno, verifica quien gano
-    {
-
-        printf("%s ha ganado\n", jugador->nombre );
-        system("pause");
-
-        return 1;
-    }
-    else if (maquina->puntos >= 12)
-    {
-        printf("Maquina ha ganado\n");
-        system("pause");
-        return 0;
-    }
-    //si hubo un ganador, esta funcion devolvera los puntos que le corresponden al usuario.
-    //si no hubo ganador y se lanzo un repetir, devuelve 2 para que no cambie de jugador el proximo turno.
-    //si no hubo ganador, devuelve juegoTerminado = -1 para que se juegue el siguiente turno.
-    return resultado;
-}
-void mostrarJugadorCartas(tJugador *jugador)
-{
-    char Cartas[6][7]={"+2","+1","-1","-2","Repite","Espejo"};
-    int i;
-    printf("\n TUS CARTAS SON:\n");
-    for(i=0;i<3;i++)
-    {
-        printf("%d) %s ",i+1,Cartas[jugador->mazo[i]-'a']);
-    }
-}
+//Funciones Ingreso
 int ingresoJugador(tJugador *jugador)
 {
     do
@@ -290,25 +327,38 @@ int ingresoJugador(tJugador *jugador)
     while(1);
     return 0;
 }
-void selectdificultad(int *d)
+ACT selecionarDificultad()
 {
     limpiarPantalla();
     char input[3];
+    int dificultad;
     int entradaValida;
     do
     {
         limpiarPantalla();
         grafica(7);
         registrarInput(input,sizeof(input),condIgual3);
-        if((entradaValida=strAInt(d,input))!=1&&!(entradaValida=rango(*d,1,3)))
+        if((entradaValida=strAInt(&dificultad,input))!=1&&!(entradaValida=rango(dificultad,1,3)))
         {
             puts("Ingreso Invalido");
             pausarPantalla();
         }
     }
     while(!entradaValida);
+    switch (dificultad)
+    {
+    case FACIL:
+        return rand3;
+    //case NORMAL:
+    //    return FUNCIONDENORMAL;
+    //case DIFICL:
+    //    return FUNCIONDEDIFICIL;
+    default:
+        break;
+    }
+    return rand3;
 }
-//int jugarTurno(tLista *list_turnos, tJugador *jugador, tJugador *maquina,int opc, int dificultad)
+//int jugarTurno(tLista360 *listaTurnos, tJugador *jugador, tJugador *maquina,int opc, int dificultad)
 //{
 //    int entradaValida=0;
 //    int seleccion;
@@ -353,7 +403,7 @@ void selectdificultad(int *d)
 //
 //}
 //
-//void generarInforme(tLista *list_turnos,tJugador jugador, char* ganador,int puntosIA){
+//void generarInforme(tLista360 *listaTurnos,tJugador jugador, char* ganador,int puntosIA){
 // char nombrearch[40], codigoGrupo[] = "arreglo";
 //    int i,
 //        j,
