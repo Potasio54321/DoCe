@@ -3,4 +3,4 @@ Ganador: a
 Puntaje de a: 12
 Puntaje de Maquina: 0
 Listado de turnos:
-Turno: 001	Carta Jugada: +1     	Jugador: a                  
+Turno: 001	Carta Jugada: -1     	Jugador: a                  

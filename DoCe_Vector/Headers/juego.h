@@ -2,7 +2,7 @@
 #define JUEGO_H_INCLUDED
 #include "PilaEstatica.h"
 //NombreArchivoConfig
-#define NOMBRE_ARCH_CONFIG "../Config.txt"
+#define NOMBRE_ARCH_CONFIG "Config.txt"
 //Dificultades
 #define FACIL 1
 #define NORMAL 2

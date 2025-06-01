@@ -46,7 +46,7 @@ void aplicarEfecto(tJugador *aplica, tJugador *aplicado);
 ACT selecionarDificultad();
 int ingresoJugador(tJugador *jugador);
 //
-char* _strcpyWhileEnd(char* dest,char* source,char end,char after);
+char* _strcpyWhile(char* dest,char* source,char end);
 
 int iniciarJuego()
 {
@@ -80,7 +80,7 @@ int jugar(tLista360 *listaTurnos, tJugador *jugador, tJugador *maquina)
     crearLista360(&rondas);
     crearRondas(&rondas,jugador,maquina,&mazo);
 
-    jugador->puntos=11;    //Opcional solo para testeo
+    jugador->puntos=12;    //Opcional solo para testeo
     do
     {
         if(!recorrerLista360(&rondas,jugarRondaConLista,listaTurnos))
@@ -114,7 +114,7 @@ int informeEstadoAPI(const tJugador*jugador,int estado)
     char textoJSON[256];
     if(!cargarConfig(NOMBRE_ARCH_CONFIG, &config))
         return 0;
-    sprintf(textoJSON,"{\n\"CodigoGrupo\":\"%s\",\n\"jugador:\":\n{\n\"nombre\":\"%s\",\n\"vencedor\":%d,\n}\n}"
+    sprintf(textoJSON,"{\"CodigoGrupo\":\"%s\",\"jugador\":{\"nombre\":\"%s\",\"vencedor\":\"%d\"}}"
             ,config.codigo,jugador->nombre,estado);
     //hacer un un texto cjson que cumpla con codigogrupo y codigo
     //jugador nombre: jugador->nombre, vencedor: estado
@@ -129,15 +129,15 @@ int cargarConfig(const char* nombreArchConfig,tConfig* config)
         return 0;
     fgets(buffer,256,archivoConfig);
     fclose(archivoConfig);
-    cursor=_strcpyWhileEnd(config->url,buffer,'|','/');
+    cursor=_strcpyWhile(config->url,buffer,'|');
     cursor++;
-    _strcpyWhileEnd(config->codigo,cursor,'\n','\0');
+    _strcpyWhile(config->codigo,cursor,'\n');
     return 1;
 }
 //Funcion solo para el caso especifico
 //NO USAR FUERA DE OTRO LADO
 //MUY ROMPIBLE
-char* _strcpyWhileEnd(char* dest,char* source,char end,char after)
+char* _strcpyWhile(char* dest,char* source,char end)
 {
     while (*source!=end)
     {
@@ -145,8 +145,8 @@ char* _strcpyWhileEnd(char* dest,char* source,char end,char after)
         dest++;
         source++;
     }
-    *dest=after;
-    return dest;
+    *dest='\0';
+    return source;
 }
 int postearEstado(const tConfig *config,const char *json)
 {
@@ -160,6 +160,7 @@ int postearEstado(const tConfig *config,const char *json)
     //Inicializar La Url
     configDarUrlCC(config,urlCC);
     curl_easy_setopt(urlDoce,CURLOPT_URL,urlCC);
+    //curl_easy_setopt(urlDoce, CURLOPT_VERBOSE, 1L); MUY UTIL
     curl_easy_setopt(urlDoce,CURLOPT_POST,1L);
     //Poner el Header adecuado y el contenido a postear
     tipoDato = curl_slist_append(tipoDato, "Content-Type: application/json");
@@ -182,8 +183,8 @@ int postearEstado(const tConfig *config,const char *json)
 void configDarUrlCC(const tConfig *config,char* destino)
 {
     strcpy(destino,config->url);
-    strcat(destino,"/");
-    strcat(destino,config->codigo);
+    //strcat(destino,"/");
+    //strcat(destino,config->codigo);
 }
 int generarInforme(tLista360 *ListaTurnos,tJugador *jugador,tJugador *maquina)
 {
@@ -498,97 +499,3 @@ ACT selecionarDificultad()
     }
     return rand3;
 }
-//int jugarTurno(tLista360 *listaTurnos, tJugador *jugador, tJugador *maquina,int opc, int dificultad)
-//{
-//    int entradaValida=0;
-//    int seleccion;
-//    char carta;
-//    if(opc == 0) //juega bot segun estrategias
-//    {
-//        ///SEGUIR ESTRATEGIA EN BASE A LA DIFICULTAD
-//        //sacarDePila(mazo,&maquina->mazo[seleccion-1],sizeof(char));
-//    }
-//    else
-//    {
-//        // Jugador humano: ingresar carta
-//      //por si ingresa un caracter o un simbolo por error
-//
-//            do
-//            {   ///FUNCION QUE MUESTRE LAS CARTAS (QUE MUESTRE EL VALOR REAL)
-//                mostrarJugadorCartas(jugador);
-//                if((scanf("%d", &seleccion)) == 1)
-//                {
-//                    if(seleccion==1 || seleccion==2 || seleccion==3){
-//                    entradaValida = 1;
-//                    carta = jugador->mazo[seleccion-1];
-//                    jugador->mazo[seleccion-1]='0';
-//                    }
-//                }
-//                else
-//                {
-//                    limpiarBuffer();
-//                }
-//            }while(!entradaValida);
-//
-//        }
-//
-//    ///FUNCION QUE HAGA ALGO EN BASE A LA CARTA INGRESADA X HUMANO O X IA
-//
-//    ///FUNCION Q GUARDE EL TURNO EN LISTA de turnos
-//
-//    if(carta == 'e'){
-//        return 2;
-//    }
-//    return -1;
-//
-//}
-//
-//void generarInforme(tLista360 *listaTurnos,tJugador jugador, char* ganador,int puntosIA){
-//    char nombrearch[40], codigoGrupo[] = "arreglo";
-//    int i,
-//        j,
-//        result;
-//    time_t t = time(NULL);
-//    struct tm tm = *localtime(&t);
-//    tPartida partida;
-//
-//    sprintf(nombrearch,"informe-juego_%04d-%02d-%02d-%02d-%02d.txt", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min);
-//
-//    FILE *pl = fopen(nombrearch,"wt");
-//
-//    if(!pl)
-//    {
-//        printf("\nError al crear el informe");
-//        return 0;
-//    }
-//
-//    result=sacarDeLista(list_partidas,&partida,sizeof(partida));
-//
-//    while(result!=0)
-//    {
-//        fprintf(pl,"JUGADOR: %-19s\nPartida: %d\nGanador: %-10s\nPuntaje: %d\n",partida.jugador,partida.numPartida,partida.ganador,partida.puntaje);
-//
-//        // Escribir el tablero de la partida
-//        fputs("TABLERO:\n", pl);
-//        for (i = 0; i < TAM; i++)
-//        {
-//            for (j = 0; j < TAM; j++)
-//            {
-//                fprintf(pl, " %c ", partida.tablero[i][j]);
-//                if (j < TAM - 1)
-//                    fprintf(pl, "|"); // Separadores verticales
-//            }
-//            fputs("\n", pl);
-//            if (i < TAM - 1)
-//                fputs("---+---+---\n", pl); // Separadores horizontales
-//        }
-//        fputs("-----------------------------------\n", pl);
-//
-//        result=sacarDeLista(list_partidas,&partida,sizeof(partida));
-//    }
-//    generarRanking(list_jugadores, pl);
-//    recorroListaYmandoDatosAPI(list_jugadores, codigoGrupo, 0, obtengoJugador);
-//    fclose(pl);
-//    return 0;
-//return;
-//}

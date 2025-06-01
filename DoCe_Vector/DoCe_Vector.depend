@@ -29,7 +29,7 @@
 	"../Headers/PilaEstatica.h"
 	<string.h>
 
-1748469763 source:c:\users\nuevo usuario\documents\c\algoritmos\tp\doce\doce_vector\main.c
+1748741390 source:c:\users\nuevo usuario\documents\c\algoritmos\tp\doce\doce_vector\main.c
 	<stdio.h>
 	<stdlib.h>
 	"Headers/Grafica.h"
@@ -52,7 +52,7 @@
 	<stdio.h>
 	<stdlib.h>
 
-1748723382 c:\users\nuevo usuario\documents\c\algoritmos\tp\doce\doce_vector\headers\juego.h
+1748743653 c:\users\nuevo usuario\documents\c\algoritmos\tp\doce\doce_vector\headers\juego.h
 	"PilaEstatica.h"
 
 1748471082 c:\users\nuevo usuario\documents\c\algoritmos\tp\doce\doce_vector\headers\sistema.h
@@ -86,7 +86,7 @@
 	<string.h>
 	<ctype.h>
 
-1748739306 source:c:\users\nuevo usuario\documents\c\algoritmos\tp\doce\doce_vector\sources\juego.c
+1748746350 source:c:\users\nuevo usuario\documents\c\algoritmos\tp\doce\doce_vector\sources\juego.c
 	<stdlib.h>
 	<stdio.h>
 	<string.h>
