@@ -1,7 +1,10 @@
 # DoCe
-Doce un juego de cartas por turnos, que simula una
-batalla entre un jugador humano y una computadora. El objetivo es alcanzar 12
-puntos antes que el oponente, utilizando cartas con distintos efectos. 
+
+**DoCe** es un juego de cartas simple pero adictivo desarrollado en C, donde un jugador humano compite contra la computadora para alcanzar 12 puntos antes que su oponente.
+Se trara de un juego dinámico, basado en estrategia y azar, que además permite registrar los resultados para futuras mejoras en la inteligencia artificial. 
+Fue desarrollado como parte de un sistema de entrenimiento para un festival, con el objetivo de ofrecer una experiencia competitiva y divertida para los asistentes.
+
+
 ## Reglas del Juego
 El jugador y la máquina comienzan con 0 puntos y una mano de 3 cartas
 cada uno.<br />
