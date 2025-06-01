@@ -19,7 +19,8 @@
 #define RESTA2 'd'
 #define REPITE 'e'
 #define ESPEJO 'f'
-
+//IA
+#define CERCAGANAR 8
 typedef struct{
     char nombre[20];
     int puntos;
