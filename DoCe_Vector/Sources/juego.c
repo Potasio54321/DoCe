@@ -34,7 +34,24 @@ void darCartaJugador(tJugador* jugador,tPila* mazo);
 int cargarMazo(tPila *mazo);
 //Funciones Decision
 int elegirCarta(void* Jugador,void* Maquina);
-int rand3(void* Maquina,void* Jugador);
+int decisionFacil(void* Maquina,void* Jugador);
+int decisionNormal(void* Maquina,void* Jugador);
+int decisionDificil(void* Maquina,void* Jugador);
+//Funciones jugarTurnoIA
+int jugarTurnoFacilIA(tJugador *maquina);
+int jugarTurnoMedioIA(tJugador *maquina, const tJugador*jugador);
+int jugarTurnoDificilIA(tJugador *maquina,const tJugador* jugador);
+//Funciones InteractuanConElMazo
+void cargarValoracion(int valoracion[],int valorSuma2,int valorSuma1,int valorResta1,int valorResta2,int valorRepite,int valorEspejo);
+int buscarCartas(const char *mazo,char tam,Cond cumple);
+int BuscarCartaConValoracion(const char mazo[],char tam,const int valoracion[]);
+//FuncionesCondicion
+int condEspejo(const void*Carta);
+int condNoResta2(const void*Carta);
+int condNoResta(const void*Carta);
+int condSoloRestaORepite(const void*Carta);
+int condSoloResta(const void*Carta);
+int condSoloSuma(const void*Carta);
 //Funciones tRonda
 void crearRondas(tLista360* rondas,tJugador* jugador,tJugador* maquina,tPila* mazo);
 void crearRonda(tRonda* ronda,tJugador* jugador,tJugador* oponente,tPila* mazo,ACT decision);
@@ -174,7 +191,7 @@ int postearEstado(const tConfig *config,const char *json)
     curl_easy_setopt(urlDoce, CURLOPT_HTTPHEADER, tipoDato);
     curl_easy_setopt(urlDoce, CURLOPT_POSTFIELDS, json);
     curl_easy_setopt(urlDoce, CURLOPT_SSL_VERIFYPEER, 0L);
-    curl_easy_setopt(urlDoce, CURLOPT_SSL_VERIFYHOST, 0L);
+    //curl_easy_setopt(urlDoce, CURLOPT_SSL_VERIFYHOST, 0L);
     resultado = curl_easy_perform(urlDoce);
     //Ver Respuesta HTTP
     curl_easy_getinfo(urlDoce, CURLINFO_RESPONSE_CODE, &codigoHTTP);
@@ -275,8 +292,6 @@ void mostrarJugadorCartas(const tJugador *jugador)
                 print_carta_menos2();
                 break;
             case REPITE: // 'e'
-                // Aquí llamamos a la función para la carta "Repite".
-                // Asegúrate de tener la función print_carta_repite() definida.
                 print_carta_repetir();
                 break;
             case ESPEJO: // 'f'
@@ -358,17 +373,54 @@ int elegirCarta(void* Jugador,void* Maquina)
     jugador->mazo[selecion-1]='\0';
     return jugador->mazo[3];
 }
-int rand3(void* Maquina,void* Jugador)
+int decisionFacil(void* Maquina,void* Jugador)
 {
     tJugador* maquina=Maquina;
     const tJugador* jugador=Jugador;
-    int selecion=rand()%3;
+    int selecion;
     grafica(JUEGAMAQUINA);
     pausarPantalla();
     limpiarPantalla();
     mostrarJugadorCartas(jugador);
     mostrarPuntajeJugador(jugador);
     mostrarPuntajeJugador(maquina);
+    selecion=jugarTurnoFacilIA(maquina);
+    maquina->mazo[3]=maquina->mazo[selecion];
+    maquina->mazo[selecion]='\0';
+    mostrarUltimaCartaJugadaJugador(maquina);
+    pausarPantalla();
+    return maquina->mazo[3];
+}
+int decisionNormal(void* Maquina,void* Jugador)
+{
+    tJugador* maquina=Maquina;
+    const tJugador* jugador=Jugador;
+    int selecion;
+    grafica(JUEGAMAQUINA);
+    pausarPantalla();
+    limpiarPantalla();
+    mostrarJugadorCartas(jugador);
+    mostrarPuntajeJugador(jugador);
+    mostrarPuntajeJugador(maquina);
+    selecion=jugarTurnoMedioIA(maquina,jugador);
+    maquina->mazo[3]=maquina->mazo[selecion];
+    maquina->mazo[selecion]='\0';
+    mostrarUltimaCartaJugadaJugador(maquina);
+    pausarPantalla();
+    return maquina->mazo[3];
+}
+int decisionDificil(void* Maquina,void* Jugador)
+{
+    tJugador* maquina=Maquina;
+    const tJugador* jugador=Jugador;
+    int selecion;
+    grafica(JUEGAMAQUINA);
+    pausarPantalla();
+    limpiarPantalla();
+    mostrarJugadorCartas(jugador);
+    mostrarPuntajeJugador(jugador);
+    mostrarPuntajeJugador(maquina);
+    selecion=jugarTurnoDificilIA(maquina,jugador);
     maquina->mazo[3]=maquina->mazo[selecion];
     maquina->mazo[selecion]='\0';
     mostrarUltimaCartaJugadaJugador(maquina);
@@ -381,8 +433,8 @@ void crearRondas(tLista360* rondas,tJugador* jugador,tJugador* maquina,tPila* ma
     tJugador*primero=maquina;
     ACT decisionPrimero=selecionarDificultad();
     tJugador*segundo=jugador;
-    //ACT decisionSegundo=elegirCarta;
-    ACT decisionSegundo=rand3;
+    ACT decisionSegundo=elegirCarta;
+    //ACT decisionSegundo=rand3;
     ACT CAMBIO;
     tRonda rondaAct;
     if(rand()%2)
@@ -533,17 +585,165 @@ ACT selecionarDificultad()
     switch (dificultad)
     {
     case FACIL:
-        return rand3;
-    //case NORMAL:
-    //    return FUNCIONDENORMAL;
-    //case DIFICL:
-    //    return FUNCIONDEDIFICIL;
+        return decisionFacil;
+    case NORMAL:
+        return decisionNormal;
+    case DIFICIL:
+        return decisionDificil;
     default:
         break;
     }
-    return rand3;
+    return decisionFacil;
 }
-
+//Funciones JugarIA
+int jugarTurnoFacilIA(tJugador *maquina)
+{
+    return rand() % 3;
+}
+int jugarTurnoMedioIA(tJugador *maquina,const tJugador*jugador)
+{
+    int cartaSelecionada;
+    ///1- Si una carta de suma le da la victoria a maquina (llega a 12 puntos o mï¿½s), jugarla.
+    if(maquina->puntos >= CERCAGANAR)
+    {
+        if((cartaSelecionada=buscarCartas(maquina->mazo,3,condSoloSuma))!=404)
+            return cartaSelecionada;
+    }
+    if(jugador->puntos==1)///2- Si puntos del jugador < 2, tira la primera carta que no sea -2
+    {
+        if((cartaSelecionada=buscarCartas(maquina->mazo,3,condNoResta2))!=404)
+            return cartaSelecionada;
+    }
+    if(jugador->puntos==0)///3- Si puntos del jugador < 1, tira la primera carta que no sea -2 y -1
+    {
+        if((cartaSelecionada=buscarCartas(maquina->mazo,3,condNoResta))!=404)
+            return cartaSelecionada;
+    }
+    ///4- Pasa si no se cumplio nada
+    return rand() % 3;
+}
+int jugarTurnoDificilIA(tJugador *maquina,const tJugador* jugador)
+{
+    int cartasBuenas = 0, cartaBuenaActual;
+    int cartaSelecionada;
+    int valoracion[6];
+    ///1- Si el jugador jugo carta negativa(-1, -2), usar espejo
+    if(rango(jugador->mazo[3],RESTA1,RESTA2))
+    {
+        if((cartaSelecionada=buscarCartas(maquina->mazo,3,condEspejo))!=404)
+            return cartaSelecionada;
+    }
+    ///2- Si esta cerca de la victoria y el jugador no que se centre en ganar.
+    if(maquina->puntos >= CERCAGANAR&&maquina->puntos>jugador->puntos)
+    {
+        if((cartaSelecionada=buscarCartas(maquina->mazo,3,condSoloSuma))!=404)
+            return cartaSelecionada;
+    }
+    //cuento las cartas buneas (+2,+1,-2,-1)
+    for(cartaBuenaActual = 0; cartaBuenaActual < 3; cartaBuenaActual++)
+        if(rango(maquina->mazo[cartaBuenaActual],SUMA2,RESTA2))
+            cartasBuenas++;
+    ///3- si puntos del jugador >=8: usar -2, si no -1, si no REPITE(si es que tengo mas de 1 carta buena)
+    if(jugador->puntos >= CERCAGANAR)
+    {
+        //aca me parecio que con 1 carta buena ya era suficiente para jugar un REPITE
+        if(cartasBuenas>1)
+            cartaSelecionada=buscarCartas(maquina->mazo,3,condSoloRestaORepite);
+        else
+            cartaSelecionada=buscarCartas(maquina->mazo,3,condSoloResta);
+        if(cartaSelecionada!=404)
+            return cartaSelecionada;
+    }
+    ///4- si puntos del jugador >= 2, maquina usa la mejor carta posible: +2 -> -2 -> REPITE(con 1 buena) -> +1 -> -1 -> Repite -> Espejo
+    if(jugador->puntos >= 2)
+    {
+        //BuscarConValoracion ya hecha
+        cargarValoracion(valoracion,6,3,2,5,1+cartasBuenas>1?3:0,0);
+        //suma2 6//suma1 3//resta2 5//resta1 2//repiteConBuenas 4//repite 1//Espejo 0
+        if((cartaSelecionada=BuscarCartaConValoracion(maquina->mazo,3,valoracion))!=-1)
+            return cartaSelecionada;
+    }
+    ///5- si puntos del jugador == 1, maquina usa la mejor carta posible sin el -2: +2 -> +1 -> -1 -> Repite -> Espejo
+    if(jugador->puntos == 1)
+    {
+        cargarValoracion(valoracion,4,3,-1,2,1,0);
+        //suma2 4//suma1 3//resta2 -1//resta1 2//repite 1//Espejo 0
+        if((cartaSelecionada=BuscarCartaConValoracion(maquina->mazo,3,valoracion))!=-1)
+            return cartaSelecionada;
+    }
+    ///6- si puntos del jugador == 0, maquina usa la mejor carta posible sin el -2 y -1: +2 -> +1 -> -1 -> Repite -> Espejo
+    if(jugador->puntos == 0)
+    {
+        cargarValoracion(valoracion,3,2,-1,-4,1,0);
+        //suma2 3//suma1 2//resta2 -1//resta1 -1//repite 1//Espejo 0
+        if((cartaSelecionada=BuscarCartaConValoracion(maquina->mazo,3,valoracion))!=-1)
+            return cartaSelecionada;
+    }
+    return rand() % 3;//En caso de que tenga solo menos con pocos puntos elige su cualquier carta
+}
+//Funciones que Interactuan con el Mazo
+void cargarValoracion(int valoracion[],int valorSuma2,int valorSuma1,int valorResta1
+                    ,int valorResta2,int valorRepite,int valorEspejo)
+{
+    valoracion[0]=valorSuma2;
+    valoracion[1]=valorSuma2;
+    valoracion[2]=valorResta1;
+    valoracion[3]=valorResta2;
+    valoracion[4]=valorRepite;
+    valoracion[5]=valorEspejo;
+}
+int BuscarCartaConValoracion(const char mazo[],char tam,const int valoracion[])
+{
+    int cartaActual,max=-1;
+    for(cartaActual=0;cartaActual<tam;cartaActual++)
+    {
+        if(max<valoracion[mazo[cartaActual]-SUMA2])
+            max=valoracion[mazo[cartaActual]-SUMA2];
+    }
+    return max;
+}
+int buscarCartas(const char *mazo,char tam,Cond cumple)
+{
+    const char *cartaActual;
+    const char *fin=mazo+tam;
+    for(cartaActual = mazo; cartaActual < fin; cartaActual++)
+    {
+        if(cumple(cartaActual))
+            return *cartaActual;
+    }
+    return 404;
+}
+//FuncionesCondicion
+int condSoloSuma(const void*Carta)
+{
+    const char* carta=Carta;
+    return rango(*carta,SUMA2,SUMA1);
+}
+int condSoloResta(const void*Carta)
+{
+    const char* carta=Carta;
+    return rango(*carta,RESTA1,RESTA2);
+}
+int condSoloRestaORepite(const void*Carta)
+{
+    const char* carta=Carta;
+    return rango(*carta,RESTA1,RESTA2)||*carta==REPITE;
+}
+int condNoResta(const void*Carta)
+{
+    const char* carta=Carta;
+    return !rango(*carta,RESTA1,RESTA2);
+}
+int condNoResta2(const void*Carta)
+{
+    const char* carta=Carta;
+    return *carta!=RESTA2;
+}
+int condEspejo(const void*Carta)
+{
+    const char* carta=Carta;
+    return *carta==ESPEJO;
+}
 int imprimoRanking(void *d1, void *d2)
 {
     tJugAPI *jugador = (tJugAPI*)d1;
