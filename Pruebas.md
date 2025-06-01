@@ -13,19 +13,82 @@
   </tr>
   <tr>
     <td colspan="3" style="text-align: center;">
-      <img src="imagenes/Captura1.JPG" alt="El bot ha jugado en la casilla (2,3)">
-      <p><em>El bot ha jugado en la casilla (2, 3)</em></p>
-      <p><em>Jugador X ha ganado</em></p>
+      <img src="imagenes/Captura1.JPG" alt="Capura1">
     </td>
+  </tr> 
+  <tr>
+    <td>Se quiere probar qué es lo que pasaría si ...</td>
+    <td>Se espera que...</td>
+    <td>La salida obtenida fue...</td>
   </tr>
   <tr>
-    <td>Se quiere probar qué es lo que pasaría si la máquina no tiene la oportunidad de ganar, pero si la de bloquear la victoria del jugador.</td>
-    <td>Se espera que la máquina bloquee la victoria del jugador.</td>
-    <td>La salida obtenida fue que la máquina bloqueo la victoria del jugador.</td>
+    <td colspan="3" style="text-align: center;">
+      <img src="imagenes/Captura1.JPG" alt="Capura1">
+    </td>
+  </tr> 
+  <tr>
+    <td>Se quiere probar qué es lo que pasaría si ...</td>
+    <td>Se espera que...</td>
+    <td>La salida obtenida fue...</td>
   </tr>
+  <tr>
+    <td colspan="3" style="text-align: center;">
+      <img src="imagenes/Captura1.JPG" alt="Capura1">
+    </td>
+  </tr> 
+  <tr>
+    <td>Se quiere probar qué es lo que pasaría si ...</td>
+    <td>Se espera que...</td>
+    <td>La salida obtenida fue...</td>
+  </tr>
+  <tr>
+    <td colspan="3" style="text-align: center;">
+      <img src="imagenes/Captura1.JPG" alt="Capura1">
+    </td>
+  </tr> 
+  <tr>
+    <td>Se quiere probar qué es lo que pasaría si ...</td>
+    <td>Se espera que...</td>
+    <td>La salida obtenida fue...</td>
+  </tr>
+  <tr>
+    <td colspan="3" style="text-align: center;">
+      <img src="imagenes/Captura1.JPG" alt="Capura1">
+    </td>
+  </tr> 
+  <tr>
+    <td>Se quiere probar qué es lo que pasaría si ...</td>
+    <td>Se espera que...</td>
+    <td>La salida obtenida fue...</td>
+  </tr>
+  <tr>
+    <td colspan="3" style="text-align: center;">
+      <img src="imagenes/Captura1.JPG" alt="Capura1">
+    </td>
+  </tr> 
+  <tr>
+    <td>Se quiere probar qué es lo que pasaría si ...</td>
+    <td>Se espera que...</td>
+    <td>La salida obtenida fue...</td>
+  </tr>
+  <tr>
+    <td colspan="3" style="text-align: center;">
+      <img src="imagenes/Captura1.JPG" alt="Capura1">
+    </td>
+  </tr> 
+  <tr>
+    <td>Se quiere probar qué es lo que pasaría si ...</td>
+    <td>Se espera que...</td>
+    <td>La salida obtenida fue...</td>
+  </tr>
+  <tr>
+    <td colspan="3" style="text-align: center;">
+      <img src="imagenes/Captura1.JPG" alt="Capura1">
+    </td>
+  </tr> 
+  
   </table>
-
-
+  
   <table>
   <thead>
     <tr>
