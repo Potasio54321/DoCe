@@ -18,5 +18,11 @@
 
 void grafica(int opc);
 int menu(char opcion);
+void print_carta_mas1();
+void print_carta_mas2();
+void print_carta_menos1();
+void print_carta_menos2();
+void print_carta_espejo();
+void print_carta_repetir();
 
 #endif // GRAFICA_H_INCLUDED

@@ -109,3 +109,99 @@
 1748724809 c:\users\nuevo usuario\documents\c\algoritmos\tp\doce\doce_vector\headers\listacircular.h
 	<stddef.h>
 
+1748755863 source:c:\users\usuario\documents\github\doce\doce_vector\main.c
+	<stdio.h>
+	<stdlib.h>
+	"Headers/Grafica.h"
+	"Headers/Sistema.h"
+
+1748758847 c:\users\usuario\documents\github\doce\doce_vector\headers\grafica.h
+
+1748754406 c:\users\usuario\documents\github\doce\doce_vector\headers\sistema.h
+	<stdlib.h>
+	<stdio.h>
+
+1748754907 source:c:\users\usuario\documents\github\doce\doce_vector\sources\funciones.c
+	"..\Headers\funcioneslista.h"
+	"../Headers/API.h"
+
+1748754887 c:\users\usuario\documents\github\doce\doce_vector\headers\funcioneslista.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1748759009 source:c:\users\usuario\documents\github\doce\doce_vector\sources\juego.c
+	<stdlib.h>
+	<stdio.h>
+	<string.h>
+	<time.h>
+	<curl/curl.h>
+	<curl/easy.h>
+	"..\Headers\juego.h"
+	"..\Headers\Menu.h"
+	"..\Headers\Grafica.h"
+	"..\Headers\ListaCircular.h"
+	"..\Headers\Sistema.h"
+	"../Headers/API.h"
+
+1748755555 c:\users\usuario\documents\github\doce\doce_vector\headers\juego.h
+	"PilaEstatica.h"
+
+1748754406 c:\users\usuario\documents\github\doce\doce_vector\headers\pilaestatica.h
+	<stdio.h>
+	<stdlib.h>
+
+1748754406 c:\users\usuario\documents\github\doce\doce_vector\headers\menu.h
+	<stddef.h>
+
+1748754406 c:\users\usuario\documents\github\doce\doce_vector\headers\listacircular.h
+	<stddef.h>
+
+1748754406 source:c:\users\usuario\documents\github\doce\doce_vector\sources\listacircular.c
+	"../Headers/ListaCircular.h"
+	<stdlib.h>
+	<string.h>
+
+1748754406 source:c:\users\usuario\documents\github\doce\doce_vector\sources\pilaestatica.c
+	"../Headers/PilaEstatica.h"
+	<string.h>
+
+1748754406 source:c:\users\usuario\documents\github\doce\doce_vector\sources\sistema.c
+	"..\Headers\Sistema.h"
+	<string.h>
+	<ctype.h>
+
+1748759009 source:c:\users\usuario\documents\github\doce\doce_vector\sources\graficos.c
+	"../Headers/Grafica.h"
+	"../Headers/Sistema.h"
+	"../Headers/Juego.h"
+	"../Headers/API.h"
+	<stdio.h>
+	<stdlib.h>
+
+1748749162 source:c:\users\usuario\documents\github\doce\doce_vector\sources\cjson.c
+	<string.h>
+	<stdio.h>
+	<math.h>
+	<stdlib.h>
+	<limits.h>
+	<ctype.h>
+	<float.h>
+	<locale.h>
+	"../Headers/cJSON.h"
+
+1739725464 c:\users\usuario\documents\github\doce\doce_vector\headers\cjson.h
+	<stddef.h>
+
+1748750267 c:\users\usuario\documents\github\doce\doce_vector\headers\api.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<curl/curl.h>
+	"cJSON.h"
+	"Juego.h"
+
+1748756473 source:c:\users\usuario\documents\github\doce\doce_vector\sources\api.c
+	"../Headers/API.h"
+	"../Headers/funcioneslista.h"
+

@@ -31,12 +31,17 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="Headers/API.h" />
 		<Unit filename="Headers/Grafica.h" />
 		<Unit filename="Headers/ListaCircular.h" />
 		<Unit filename="Headers/PilaEstatica.h" />
 		<Unit filename="Headers/Sistema.h" />
+		<Unit filename="Headers/cJSON.h" />
 		<Unit filename="Headers/funcioneslista.h" />
 		<Unit filename="Headers/juego.h" />
+		<Unit filename="Sources/API.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="Sources/ListaCircular.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -44,6 +49,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="Sources/Sistema.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Sources/cJSON.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="Sources/funciones.c">

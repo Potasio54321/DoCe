@@ -7,6 +7,7 @@ int main()
     char Input[3];
     do
     {
+        grafica(0);
         grafica(5);
         registrarInput(Input,sizeof(Input),condIgual3);
     } while (menu(Input[0])!=CONDSALIR);

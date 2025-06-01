@@ -47,5 +47,5 @@ typedef struct{
 }tRonda;
 
 int iniciarJuego();
-
+int imprimoRanking(void *d1, void *d2);
 #endif // JUEGO_H_INCLUDED

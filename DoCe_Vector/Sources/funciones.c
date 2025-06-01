@@ -1,4 +1,5 @@
 #include "..\Headers\funcioneslista.h"
+#include "../Headers/API.h"
 #define SINMEMORIA 0
 #define LISTAVACIA 0
 #define POSINVALIDA 0
@@ -256,4 +257,32 @@ void intercambiar(tLista *a, tLista *b){
     (*a)->info = (*b)->info;
     (*b)->info = auxinfo;
 
+}
+
+void ordenarLista(tLista *pl, int (*cmp)(const void *, const void*)){
+    tLista *pri = pl;
+    if(!(*pl))
+        return;
+    while((*pl)->sig)
+    {
+        if(cmp((*pl)->info, (*pl)->sig->info) < 0)
+        {
+            tLista *q = pri;
+            tNodo *aux = (*pl)->sig;
+            (*pl)->sig = aux->sig;
+            while(cmp((*q)->info, aux->info) > 0)
+                q = &(*q)->sig;
+            aux->sig = *q;
+            *q = aux;
+        }
+        else
+            pl = &(*pl)->sig;
+    }
+}
+
+int comparoPorPuntaje(const void *d1, const void *d2)
+{
+    tJugAPI *jug1 = (tJugAPI*)d1;
+    tJugAPI *jug2 = (tJugAPI*)d2;
+    return(jug1->puntos - jug2->puntos);
 }

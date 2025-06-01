@@ -42,4 +42,10 @@ void ordenarSeleccionLista(tLista *pl, int (*cmp)(const void*, const void*));
 tLista *buscarMenor(tLista*nodoDesde,int (*cmp)(const void *, const void*));
 ///Intercambiar
 void intercambiar(tLista *a, tLista *b);
+
+
+void ordenarLista(tLista *pl, int (*cmp)(const void *, const void*));
+int comparoPorPuntaje(const void *d1, const void *d2);
+
+
 #endif // FUNCIONESLISTA_H_INCLUDED

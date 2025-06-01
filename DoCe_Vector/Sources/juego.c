@@ -9,6 +9,7 @@
 #include "..\Headers\Grafica.h"
 #include "..\Headers\ListaCircular.h"
 #include "..\Headers\Sistema.h"
+#include "../Headers/API.h"
 //Funciones Juego
 int jugar(tLista360 *listaTurnos, tJugador *jugador, tJugador *maquina);
 int VerGanador(const tJugador *jugador,const tJugador *maquina);
@@ -53,8 +54,11 @@ int iniciarJuego()
     int resultado;
     tJugador jugador;
     tJugador maquina={"Maquina",0};
+    tConfig config;
+
     tLista360 listaTurnos;
-    int a;
+    cargarConfig(NOMBRE_ARCH_CONFIG, &config);
+    //int a;
     if(!ingresoJugador(&jugador)) //si no se ingreso jugador vuelve al menu
         return 0;
 
@@ -66,8 +70,11 @@ int iniciarJuego()
         grafica(2);
     generarInforme(&listaTurnos,&jugador, &maquina);
     vaciarLista360(&listaTurnos);
-    a=informeEstadoAPI(&jugador,VerGanador(&jugador,&maquina));
-    printf("Codigo http:%d\n",a);
+
+    enviarResultadoJugadorAPI(jugador.nombre, resultado, config.codigo);
+
+   // a=informeEstadoAPI(&jugador,VerGanador(&jugador,&maquina));
+   // printf("Codigo http:%d\n",a);
     return 1;
 }
 int jugar(tLista360 *listaTurnos, tJugador *jugador, tJugador *maquina)
@@ -233,17 +240,54 @@ void mostrarPuntajeJugador(const tJugador* jugador)
 {
     printf("%s Tiene %d Puntos\n",jugador->nombre,jugador->puntos);
 }
+//void mostrarJugadorCartas(const tJugador *jugador)
+//{
+//    char Cartas[6][7]={"+2","+1","-1","-2","Repite","Espejo"};
+//    int i;
+//    printf("\n TUS CARTAS SON:\n");
+//    for(i=0;i<3;i++)
+//    {
+//        printf("%d) %s ",i+1,Cartas[jugador->mazo[i]-'a']);
+//    }
+//    puts("");
+//}
+
 void mostrarJugadorCartas(const tJugador *jugador)
 {
-    char Cartas[6][7]={"+2","+1","-1","-2","Repite","Espejo"};
+    //char Cartas[6][7]={"+2","+1","-1","-2","Repite","Espejo"};
     int i;
     printf("\n TUS CARTAS SON:\n");
     for(i=0;i<3;i++)
     {
-        printf("%d) %s ",i+1,Cartas[jugador->mazo[i]-'a']);
+        printf("\n\tCarta %d):\n", i + 1);
+
+        switch (jugador->mazo[i]) {
+            case SUMA2: // 'a'
+                print_carta_mas2();
+                break;
+            case SUMA1: // 'b'
+                print_carta_mas1();
+                break;
+            case RESTA1: // 'c'
+                print_carta_menos1();
+                break;
+            case RESTA2: // 'd'
+                print_carta_menos2();
+                break;
+            case REPITE: // 'e'
+                // Aquí llamamos a la función para la carta "Repite".
+                // Asegúrate de tener la función print_carta_repite() definida.
+                print_carta_repetir();
+                break;
+            case ESPEJO: // 'f'
+                print_carta_espejo();
+                break;
+        }
     }
+
     puts("");
 }
+
 //Funciones Mazo
 void dar3CartasJugador(tJugador* jugador,tPila* mazo)
 {
@@ -498,4 +542,11 @@ ACT selecionarDificultad()
         break;
     }
     return rand3;
+}
+
+int imprimoRanking(void *d1, void *d2)
+{
+    tJugAPI *jugador = (tJugAPI*)d1;
+    printf("\t\t\t\t%s\t%-4d\n", jugador->nombre, jugador->puntos);
+    return 0;
 }

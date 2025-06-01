@@ -1,21 +1,34 @@
 #include "../Headers/Grafica.h"
 #include "../Headers/Sistema.h"
+#include "../Headers/Juego.h"
+#include "../Headers/API.h"
 #include <stdio.h>
 #include <stdlib.h>
+
 void grafica(int opc)
 {
     switch(opc)
     {
     case INTRODUCCION:
-        printf("\n\t***************************************************************************");
-        printf("\n\t///////////////////////////////////////////////////////////////////////////");
-        printf("\n\t**                                                                       **");
-        printf("\n\t///////////////////////////////////////////////////////////////////////////");
-        printf("\n\t***************************************************************************\n\n\n");
+        printf("\n\t\t***************************************************************************");
+        printf("\n\t\t///////////////////////////////////////////////////////////////////////////");
+        printf("\n\t\t**\t                                                      ________   **");
+        printf("\n\t\t**\t                                                     |+12     || **");
+        printf("\n\t\t**\t     _____      _______    ________    ____      ____|___     || **");
+        printf("\n\t\t**\t    |     \\    /  ___  \\  /    ___|| |  __||    | D      ||   || **");
+        printf("\n\t\t**\t    |  __  \\   | |   | || |   ||     |  |       |   O    ||+12|| **");
+        printf("\n\t\t**\t    | |  |  || | |   | || |   ||     |  __||    |     C  ||___|| **");
+        printf("\n\t\t**\t    | |__|  || | |___| || |   ||__   |  |       |       E||      **");
+        printf("\n\t\t**\t    |______//  |_______||  \\______|| |____||    |________||      **");
+        printf("\n\t\t**                                                                       **");
+        printf("\n\t\t**                                                                       **");
+        printf("\n\t\t///////////////////////////////////////////////////////////////////////////");
+        printf("\n\t\t***************************************************************************\n\n\n");
         printf("\t\tUn desarrollo de \"VECTOR\" ");
         printf("\n\t\t\t - DELGADO MAILEN ");
         printf("\n\t\t\t - MAMANI LUCAS ");
-        printf("\n\t\t\t - LOPEZ MANUEL ");
+        printf("\n\t\t\t - LOPEZ MANUEL \n\n");
+        pausarPantalla();
         break;
 
     case VICTORIA: //victoria
@@ -87,11 +100,20 @@ void grafica(int opc)
         break;
     case MENU:
         limpiarPantalla();
-        puts("=============== MENU ===============");
-        printf("%c) Jugar.\n",CONDJUGAR);
-        printf("%c) Ver Ranking.\n",CONDVERRANKING);
-        printf("%c) Salir.\n",CONDSALIR);
-        puts("Ingrese solo un Caracter");
+        printf("\n\n");
+        printf("\t*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+\n");
+        printf("\t||    __    ___   _____    __   _    __   __      ||\n");
+        printf("\t||   |  \\  /  || |   __|| |  \\ | || | |  | ||     ||\n");
+        printf("\t||   |   \\/   || |  ||_   |   \\| || | |  | ||     ||\n");
+        printf("\t||   | |\\  /| || |    _|| | |\\   || | |  | ||     ||\n");
+        printf("\t||   | | \\/ | || |  ||_   | | \\  || |  \\_/ ||     ||\n");
+        printf("\t||   |_|    |_|| |_____|| |_|  \\_||  \\____//      ||\n");
+        printf("\t||                                                ||\n");
+        printf("\t|| %c) Jugar.                                      ||\n",CONDJUGAR);
+        printf("\t|| %c) Ver Ranking.                                ||\n",CONDVERRANKING);
+        printf("\t|| %c) Salir.                                      ||\n",CONDSALIR);
+        printf("\t||             Ingrese solo un Caracter           ||\n");
+        printf("\t*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+*+\n");
         break;
     case INGRESOJUGADOR:
         limpiarPantalla();
@@ -105,13 +127,13 @@ void grafica(int opc)
 
     case INGRESODIFICULTAD:
         limpiarPantalla();
-        printf("\n\t\t ========================================================");
-        printf("\n\t\t|\t\t   DIFICULTAD                   |");
-        printf("\n\t\t|\t\t   --------------------                  |");
-        printf("\n\t\t|\t [1] FACIL     |");
-        printf("\n\t\t|\t [2] MEDIO     |");
-        printf("\n\t\t|\t [3] DIFICIL    |");
-        printf("\n\t\t ========================================================\n\n");
+        printf("\n\t\t =======================================================");
+        printf("\n\t\t|\t\t   DIFICULTAD                          |");
+        printf("\n\t\t|\t\t   ----------                          |");
+        printf("\n\t\t|\t [1] FACIL                                     |");
+        printf("\n\t\t|\t [2] MEDIO                                     |");
+        printf("\n\t\t|\t [3] DIFICIL                                   |");
+        printf("\n\t\t =======================================================\n\n");
         printf("Seleccione nivel de dificultad: ");
         break;
     case JUEGAJUGADOR:
@@ -134,11 +156,11 @@ int menu(char opcion)
     switch (opcion)
     {
     case CONDJUGAR:
-        puts("Estas Jugando");
         iniciarJuego();
         break;
     case CONDVERRANKING:
-        puts("Estas viendo el Ranking");
+        grafica(RANKING);
+        recuperar_de_api();
         break;
     case CONDSALIR:
         puts("Saliendo del programa...");
@@ -149,4 +171,66 @@ int menu(char opcion)
     system("pause");
     system("cls");
     return opcion;
+}
+void print_carta_mas1() {
+
+    printf(" _____\n");
+    printf("|+1   |\n");
+    printf("|     |\n");
+    printf("|   +1|\n");
+    printf("|_____|\n");
+
+}
+
+// Carta -1
+void print_carta_menos1() {
+
+    printf("\t _____\n");
+    printf("\t|-1   |\n");
+    printf("\t|     |\n");
+    printf("\t|   -1|\n");
+    printf("\t|_____|\n");
+
+}
+
+// Carta +2
+void print_carta_mas2() {
+
+   printf("\t _____\n");
+    printf("\t|+2   |\n");
+    printf("\t|     |\n");
+    printf("\t|   +2|\n");
+    printf("\t|_____|\n");
+}
+
+// Carta -2
+void print_carta_menos2() {
+
+    printf("\t _____\n");
+    printf("\t|-2   |\n");
+    printf("\t|     |\n");
+    printf("\t|   -2|\n");
+   printf("\t|_____|\n");
+
+}
+
+// Carta REPETIR
+void print_carta_repetir() {
+
+    printf("\t _____\n");
+    printf("\t|REP  |\n");
+    printf("\t| <-> |\n");
+    printf("\t|  REP|\n");
+    printf("\t|_____|\n");
+
+}
+
+// Carta ESPEJO
+void print_carta_espejo() {
+
+    printf("\t _____\n");
+    printf("\t|ES   |\n");
+    printf("\t| PE  |\n");
+    printf("\t|   JO|\n");
+   printf("\t|_____|\n");
 }
