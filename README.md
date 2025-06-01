@@ -35,5 +35,24 @@ La IA de la computadora cuenta con 3 niveles de dificultad:
 	- Si el jugador está cerca de ganar, prioriza cartas de “repetir turno” o “sacar puntos”.
  	- Usa carta espejo en caso de recibir una carta negativa del oponente.
   	- Prefiere repetir turno si tiene al menos una carta buena en mano.
+  
+## 🧪 Pruebas
+Ver el archivo `pruebas.md` para conocer distintos casos de prueba realizados con descripción, salida esperada y salida obtenida.
+
+## 🧱 Estructura y estrategia
+Ver el archivo `estrategia.md` para conocer las estructuras de datos y estrategias utilizidadas en el juego.
   	  
 ## ⚙️ Configuraciones
+### Configuraciones del juego
+Si deseás modificar alguna de las configuraciones del juego, podes hacerlo editando manualmente el archivo "Config.txt", respetando el siguiente formato:
+```
+UrlApi|Codigo identificador grupo
+```
+### Configuraciones de libcurl y Codeblocks
+Este proyecto necesita de la instalacion de curl para conectarse con la api, si no lo tiene instalado siga las sigueintes instrucciones:
+1. Descargar la última versión de curl desde la pagina oficial de [curl](https://curl.se/windows/).
+2. Descomprimir e zip y pasar esa carpeta a una ubicación que no la vayan a borrar.
+3. Agregar dentro de PATH (como variable de entorno) la ubicación a la carpeta “bin”.
+4. En Codeblocks: Settings > Compiler > Linker Settings: agregar ubicación a “lib\libcurl.dll.a”.
+5. En Codeblocks: Settings > Compiler > Search directories > Compiler y Resource compiler: agregar ubicación a “include”.
+6. En Codeblocks: Settings > Compiler > Search directories > Linker: agregar ubicación a “lib”.
