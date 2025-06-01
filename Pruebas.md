@@ -1,5 +1,5 @@
 # Casos de Prueba  
-.
+
 <table>
   <tr>
     <th>Descripción</th>
