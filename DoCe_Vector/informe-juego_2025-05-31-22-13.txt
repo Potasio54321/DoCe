@@ -1,0 +1,6 @@
+JUGADOR: aa                 
+Ganador: aa        
+Puntaje de aa: 12
+Puntaje de Maquina: 0
+Listado de turnos:
+Turno: 001	Carta Jugada: +2     	Jugador: aa                 

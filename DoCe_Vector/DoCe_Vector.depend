@@ -52,7 +52,7 @@
 	<stdio.h>
 	<stdlib.h>
 
-1748635545 c:\users\nuevo usuario\documents\c\algoritmos\tp\doce\doce_vector\headers\juego.h
+1748723382 c:\users\nuevo usuario\documents\c\algoritmos\tp\doce\doce_vector\headers\juego.h
 	"PilaEstatica.h"
 
 1748471082 c:\users\nuevo usuario\documents\c\algoritmos\tp\doce\doce_vector\headers\sistema.h
@@ -86,11 +86,13 @@
 	<string.h>
 	<ctype.h>
 
-1748637079 source:c:\users\nuevo usuario\documents\c\algoritmos\tp\doce\doce_vector\sources\juego.c
+1748739306 source:c:\users\nuevo usuario\documents\c\algoritmos\tp\doce\doce_vector\sources\juego.c
 	<stdlib.h>
 	<stdio.h>
 	<string.h>
 	<time.h>
+	<curl/curl.h>
+	<curl/easy.h>
 	"..\Headers\juego.h"
 	"..\Headers\Menu.h"
 	"..\Headers\Grafica.h"
@@ -99,11 +101,11 @@
 
 1748636924 c:\users\nuevo usuario\documents\c\algoritmos\tp\doce\doce_vector\headers\grafica.h
 
-1748636213 source:c:\users\nuevo usuario\documents\c\algoritmos\tp\doce\doce_vector\sources\listacircular.c
+1748737856 source:c:\users\nuevo usuario\documents\c\algoritmos\tp\doce\doce_vector\sources\listacircular.c
 	"../Headers/ListaCircular.h"
 	<stdlib.h>
 	<string.h>
 
-1748635751 c:\users\nuevo usuario\documents\c\algoritmos\tp\doce\doce_vector\headers\listacircular.h
+1748724809 c:\users\nuevo usuario\documents\c\algoritmos\tp\doce\doce_vector\headers\listacircular.h
 	<stddef.h>
 

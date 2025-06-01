@@ -10,8 +10,12 @@ void crearLista360(tLista360 *pLista)
 
 void vaciarLista360(tLista360 *pLista)
 {
-    tNodo *elim=*pLista;
-    tNodo *cursor=elim;
+    tNodo *elim;
+    tNodo *cursor;
+    if(!*pLista)
+        return;
+    elim=(*pLista)->sig;
+    cursor=elim;
     //a b c d e -> a
     while(cursor!=*pLista)
     {
@@ -37,7 +41,7 @@ int lista360Llena(const tLista360* pLista,size_t tamAgregar)
 int ponerEnLista360Ini(tLista360 *pLista,const void* dato,size_t tamElem)
 {
     tNodo *nuevo;
-    nuevo=malloc(sizeof(tNodo*));
+    nuevo=malloc(sizeof(tNodo));
     if(!nuevo||!(nuevo->info=malloc(tamElem)))
     {
         free(nuevo);
@@ -61,7 +65,7 @@ int ponerEnLista360Ini(tLista360 *pLista,const void* dato,size_t tamElem)
 int ponerEnLista360Fin(tLista360 *pLista,const void* dato,size_t tamElem)
 {
     tNodo *nuevo;
-    nuevo=malloc(sizeof(tNodo*));
+    nuevo=malloc(sizeof(tNodo));
     if(!nuevo||!(nuevo->info=malloc(tamElem)))
     {
         free(nuevo);
@@ -121,6 +125,20 @@ int sacarEnLista360Fin(tLista360 *pLista,void* dato,size_t tamElem)
     return 1;
 }
 
+int verFinLista360(tLista360 *pLista,void* dato,size_t tamElem)
+{
+    tNodo *cursorLista=*pLista;
+    if(*pLista==NULL)
+    {
+        return 0;
+    }
+    while(cursorLista->sig!=*pLista)
+    {
+        cursorLista=cursorLista->sig;
+    }
+    memcpy(dato,cursorLista->info,min(cursorLista->tamElem,tamElem));
+    return 1;
+}
 int recorrerLista360(const tLista360* pLista360, int (*accion)(void *a, void *b), void *param)
 {
     tNodo *cursor;

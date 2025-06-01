@@ -32,10 +32,14 @@
 			<Add option="-Wall" />
 		</Compiler>
 		<Unit filename="Headers/Grafica.h" />
+		<Unit filename="Headers/ListaCircular.h" />
 		<Unit filename="Headers/PilaEstatica.h" />
 		<Unit filename="Headers/Sistema.h" />
 		<Unit filename="Headers/funcioneslista.h" />
 		<Unit filename="Headers/juego.h" />
+		<Unit filename="Sources/ListaCircular.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="Sources/PilaEstatica.c">
 			<Option compilerVar="CC" />
 		</Unit>

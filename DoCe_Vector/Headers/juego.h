@@ -1,6 +1,8 @@
 #ifndef JUEGO_H_INCLUDED
 #define JUEGO_H_INCLUDED
 #include "PilaEstatica.h"
+//NombreArchivoConfig
+#define NOMBRE_ARCH_CONFIG "../Config.txt"
 //Dificultades
 #define FACIL 1
 #define NORMAL 2
@@ -28,7 +30,15 @@ typedef struct{
     char cartaJugada;
     int turno;
 }tTurno;
+
+typedef struct
+{
+    char url[256];
+    char codigo[32];
+}tConfig;
+
 typedef int (*ACT)(void*,void*);
+
 typedef struct{
     tJugador* jugador;
     tJugador* oponente;

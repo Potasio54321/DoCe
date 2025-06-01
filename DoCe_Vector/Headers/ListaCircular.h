@@ -22,6 +22,7 @@ int ponerEnLista360Fin(tLista360 *pLista360,const void* dato,size_t tamElem);
 
 int sacarEnLista360Ini(tLista360 *pLista360,void* dato,size_t tamElem);
 int sacarEnLista360Fin(tLista360 *pLista360,void* dato,size_t tamElem);
+int verFinLista360(tLista360 *pLista,void* dato,size_t tamElem);
 
 int recorrerLista360(const tLista360* pLista360, int (*ACT)(void *a, void *b), void *param);
 
