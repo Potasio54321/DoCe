@@ -1,0 +1,6 @@
+JUGADOR: Lucas              
+Ganador: Lucas     
+Puntaje de Lucas: 12
+Puntaje de Maquina: 0
+Listado de turnos:
+Turno: 001	Carta Jugada: -1     	Jugador: Lucas              

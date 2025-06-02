@@ -205,3 +205,25 @@
 	"../Headers/API.h"
 	"../Headers/funcioneslista.h"
 
+1748782855 source:c:\users\lucas\documents\github\doce\doce_vector\sources\cjson.c
+	<string.h>
+	<stdio.h>
+	<math.h>
+	<stdlib.h>
+	<limits.h>
+	<ctype.h>
+	<float.h>
+	<locale.h>
+	"../Headers/cJSON.h"
+
+1748782854 c:\users\lucas\documents\github\doce\doce_vector\headers\cjson.h
+	<stddef.h>
+
+1748394605 source:c:\users\lucas\documents\github\doce\doce_vector\sources\pilaestatica.c
+	"../Headers/PilaEstatica.h"
+	<string.h>
+
+1748816186 c:\users\lucas\documents\github\doce\doce_vector\headers\pilaestatica.h
+	<stdio.h>
+	<stdlib.h>
+

@@ -1,0 +1,8 @@
+JUGADOR: lucas              
+Ganador: lucas     
+Puntaje de lucas: 12
+Puntaje de Maquina: 0
+Listado de turnos:
+Turno: 001	Carta Jugada: Repite 	Jugador: Maquina            
+Turno: 002	Carta Jugada: +2     	Jugador: Maquina            
+Turno: 002	Carta Jugada: -2     	Jugador: lucas              
