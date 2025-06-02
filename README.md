@@ -58,7 +58,7 @@ Este proyecto necesita de la instalación de curl para conectarse con la api, si
 6. En Codeblocks: Settings > Compiler > Search directories > Linker: agregar ubicación a “lib”.
 
 ## 👥 Créditos
-Este proyecto fue desarrollado por estudiantes del grupo **Vector** de Ingeniería Informática para la materia **Algoritmos y Estructuras de Datos**.
+Este proyecto fue desarrollado por estudiantes del grupo **Vector** de Ingeniería Informática para la materia **Algoritmos y Estructuras de Datos**.  
 **Integrante del grupo:**
 - Delgado Mailen
 - Mamani Lucas
