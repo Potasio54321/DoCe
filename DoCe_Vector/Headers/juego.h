@@ -19,6 +19,7 @@
 #define ESPEJO 'f'
 //IA
 #define CERCAGANAR 8
+#define NOBUSCAR -1
 typedef struct{
     char nombre[20];
     int puntos;
