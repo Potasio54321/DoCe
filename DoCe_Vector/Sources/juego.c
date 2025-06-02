@@ -1,4 +1,4 @@
-#define TESTEO //ELIMINAR LUEGO
+//#define TESTEO //ELIMINAR LUEGO
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -263,8 +263,11 @@ int cargarMazoDescartes(tPila* mazo,tPila* descartes)
 int elegirCarta(void* Jugador,void* Maquina)
 {
     tJugador* jugador=Jugador;
-    //const tJugador* maquina=Maquina;
+    #ifndef TESTEO
+    const tJugador* maquina=Maquina;
+    #else
     tJugador* maquina=Maquina;
+    #endif // TESTEO
     int selecion;
     int entradaValida;
     char input[3];
@@ -281,11 +284,12 @@ int elegirCarta(void* Jugador,void* Maquina)
         jugador->mazo[1]=2;
         jugador->mazo[2]=3;
         jugador->mazo[3]=4;
-
+        jugador->puntos=1;
         maquina->mazo[0]=5;
         maquina->mazo[1]=6;
         maquina->mazo[2]=7;
         maquina->mazo[3]=8;
+        maquina->puntos=1;
         #endif
         printf("%s Ingrese su carta a Jugar: ", jugador->nombre);
         registrarInput(input,sizeof(input),condIgual3);

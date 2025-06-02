@@ -2,6 +2,7 @@
 *.d
 # Archivos de texto
 *.txt
+*.json
 # Object files
 *.o
 *.ko

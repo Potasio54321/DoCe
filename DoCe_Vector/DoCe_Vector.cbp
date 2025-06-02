@@ -38,7 +38,6 @@
 		<Unit filename="Headers/PilaEstatica.h" />
 		<Unit filename="Headers/Sistema.h" />
 		<Unit filename="Headers/cJSON.h" />
-		<Unit filename="Headers/funcioneslista.h" />
 		<Unit filename="Headers/juego.h" />
 		<Unit filename="Sources/API.c">
 			<Option compilerVar="CC" />
@@ -56,9 +55,6 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="Sources/cJSON.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="Sources/funciones.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="Sources/graficos.c">

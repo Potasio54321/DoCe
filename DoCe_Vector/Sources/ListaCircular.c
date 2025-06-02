@@ -102,13 +102,14 @@ int sacarEnLista360Ini(tLista360 *pLista,void* dato,size_t tamElem)
 ///Esta es una forma de sacar ineficiente porque debe recorrer toda la lista para sacar
 int sacarEnLista360Fin(tLista360 *pLista,void* dato,size_t tamElem)
 {
-    tNodo *cursorelim=*pLista;
+    tNodo *cursorelim;
     if(*pLista==NULL)
         return 0;
     if((*pLista)->sig==*pLista)
         *pLista=NULL;
     else
     {
+        cursorelim=*pLista;
         while(cursorelim->sig!=*pLista)
         {
             cursorelim=cursorelim->sig;
@@ -126,16 +127,11 @@ int sacarEnLista360Fin(tLista360 *pLista,void* dato,size_t tamElem)
 
 int verFinLista360(tLista360 *pLista,void* dato,size_t tamElem)
 {
-    tNodo *cursorLista=*pLista;
     if(*pLista==NULL)
     {
         return 0;
     }
-    while(cursorLista->sig!=*pLista)
-    {
-        cursorLista=cursorLista->sig;
-    }
-    memcpy(dato,cursorLista->info,min(cursorLista->tamElem,tamElem));
+    memcpy(dato,(*pLista)->info,min((*pLista)->tamElem,tamElem));
     return 1;
 }
 int recorrerLista360(const tLista360* pLista360, int (*accion)(void *a, void *b), void *param)
