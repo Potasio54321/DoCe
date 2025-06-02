@@ -1,145 +1,234 @@
 #include "../Headers/API.h"
-#include "../Headers/funcioneslista.h"
-size_t write_callback(void *data, size_t size, size_t nmemb, void *userp) {
-    size_t total_size = size * nmemb;
-    struct Memory *mem = (struct Memory *)userp;
-    char *ptr = realloc(mem->response, mem->size + total_size + 1);
-    if (ptr == NULL) {
+#include "../Headers/ListaSEnlazada.h"
+#include "../Headers/cJSON.h"
+#include <curl/curl.h>
+#include <stdio.h>
+//Funciones tConfig
+char* _strcpyWhile(char* dest,char* source,char end);
+void configDarUrlCC(const tConfig *config,char* destino);
+void configDarUrl(const tConfig *config,char* destino);
+//Funciones de memoria
+int tMemoriaCrear(tMemoria* memoria);
+int respuestaInvalida(tMemoria* curlRegistro);
+//Funciones para Leer
+int cargarLista(tLista* listaJugadores,tMemoria *curlRegistro);
+int cargaRegistro(CURL *curl,tMemoria *curlRegistro);
+void mostrarListaOrdenada(tLista* listaJugadores);
+
+int cmp_tJugAPIPorGanadas(const void* Jugador1,const void* Jugador2);
+int imprimoRanking(void *d1, void *d2);
+
+int verRanking()
+{
+    tLista listaJugadores;
+    tMemoria curlRegistro;
+    CURL *curl = curl_easy_init();
+    if (!curl)
+    {
+        fprintf(stderr, "Error al inicializar cURL\n");
+        return ERR_CURL;
+    }
+    if(!tMemoriaCrear(&curlRegistro))
+    {
+        curl_easy_cleanup(curl);
+        return ERR_MEM;
+    }
+    if(!cargaRegistro(curl,&curlRegistro))
+    {
+        free(curlRegistro.respuesta);
+        curl_easy_cleanup(curl);
+        return ERR_CURL;
+    }
+    curl_easy_cleanup(curl);
+    if(!cargarLista(&listaJugadores,&curlRegistro))
+    {
+        vaciarLista(&listaJugadores);
+        free(curlRegistro.respuesta);
+        return ERR_CJSON;
+    }
+    free(curlRegistro.respuesta);
+    mostrarListaOrdenada(&listaJugadores);
+    vaciarLista(&listaJugadores);
+    return 1;
+}
+int cargarLista(tLista* listaJugadores,tMemoria *curlRegistro)
+{
+    cJSON * respuesta;
+    cJSON *jugador;
+    cJSON *nombre,*cantidadPartidasGanadas;
+    tJugAPI jugadorAct;
+    int cantElem,numJugadorActual;
+    if(respuestaInvalida(curlRegistro))
+    {
+        puts("No hay datos disponibles en la API.");
         return 0;
     }
-    mem->response = ptr;
-    memcpy(&(mem->response[mem->size]), data, total_size);
-    mem->size += total_size;
-    mem->response[mem->size] = '\0';
-    return total_size;
+    crearLista(listaJugadores);
+    if(!(respuesta=cJSON_Parse(curlRegistro->respuesta))||!cJSON_IsArray(respuesta))
+    {
+        puts("La respuesta no esta formateada como lo esperado.");
+        cJSON_Delete(respuesta);
+        return 0;
+    }
+    cantElem=cJSON_GetArraySize(respuesta);
+    for (numJugadorActual = 0; numJugadorActual < cantElem; numJugadorActual++)
+    {
+        jugador = cJSON_GetArrayItem(respuesta, numJugadorActual);
+        nombre = cJSON_GetObjectItem(jugador, "nombreJugador");
+        cantidadPartidasGanadas = cJSON_GetObjectItem(jugador, "cantidadPartidasGanadas");
+
+        memcpy(jugadorAct.nombre, nombre->valuestring, sizeof(jugadorAct.nombre));
+        jugadorAct.cantidadPartidasGanadas = cantidadPartidasGanadas->valueint;
+        if(!ponerPrincipioLista(listaJugadores, &jugadorAct, sizeof(tJugAPI)))
+        {
+            puts("Falta de memoria");
+            cJSON_Delete(respuesta);
+            return 0;
+        }
+    }
+    cJSON_Delete(respuesta);
+    return 1;
 }
+void mostrarListaOrdenada(tLista* listaJugadores)
+{
+    ordenadoSeleccionLista(listaJugadores,cmp_tJugAPIPorGanadas);
+    printf("\t\t\t |//////////////////////////////////////////////////|\n");
+    printf("\t\t\t |Nombre%28sPartidas Ganadas|\n"," ");
+    printf("\t\t\t |//////////////////////////////////////////////////|\n");
+    recorrerLista(listaJugadores,NULL,imprimoRanking);
+    printf("\t\t\t |//////////////////////////////////////////////////|\n");
+}
+int cmp_tJugAPIPorGanadas(const void* Jugador1,const void* Jugador2)
+{
+    const tJugAPI *jugador1=Jugador1;
+    const tJugAPI *jugador2=Jugador2;
+    return jugador2->cantidadPartidasGanadas-jugador1->cantidadPartidasGanadas;
+}
+int imprimoRanking(void *d1, void *d2)
+{
+    tJugAPI *jugador = (tJugAPI*)d1;
+    printf("\t\t\t |%-34s|%15d|\n", jugador->nombre, jugador->cantidadPartidasGanadas);
+    return 0;
+}
+int respuestaInvalida(tMemoria* curlRegistro)
+{
+    return !curlRegistro->respuesta||strlen(curlRegistro->respuesta)==0||strcmp(curlRegistro->respuesta,"[]")==0;
+}
+size_t escrituraCallBack(void *data, size_t tam, size_t ncant, void *userp)
+{
+    size_t ntam = tam * ncant;
+    tMemoria *mem = userp;
 
-void recuperar_de_api(void) {
-
-    tLista listaJug;
-    tJugAPI jug;
-    crearLista(&listaJug);
-
-    CURL *curl = curl_easy_init();
-    if (!curl) {
-        fprintf(stderr, "Error al inicializar cURL\n");
-        return;
+    char *ptr = realloc(mem->respuesta, mem->tam + ntam + 1);
+    if (ptr == NULL)
+    {
+        return 0;
     }
-    struct Memory chunk = { .response = malloc(1), .size = 0 };
-    if (chunk.response == NULL) {
-        fprintf(stderr, "Error al asignar memoria\n");
-        curl_easy_cleanup(curl);
-        return;
+
+    mem->respuesta = ptr;
+    memcpy(mem->respuesta+mem->tam, data, ntam);
+    mem->tam += ntam;
+    *(mem->respuesta+mem->tam) = '\0';
+
+    return ntam;
+}
+int tMemoriaCrear(tMemoria* memoria)
+{
+    memoria->respuesta=malloc(1);
+    if(!memoria)
+        return 0;
+    memoria->tam=0;
+    return 1;
+}
+int cargaRegistro(CURL *curl,tMemoria *curlRegistro)
+{
+    CURLcode codRes;
+    tConfig config;
+    char urlCC[288];
+    if(!cargarConfig(NOMBRE_ARCH_CONFIG,&config))
+    {
+        puts("Error al cargar las configuraciones");
+        return 0;
     }
-    chunk.response[0] = '\0';
-    curl_easy_setopt(curl, CURLOPT_URL, URL_API2);
-    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_callback);
-    curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void *)&chunk);
+    configDarUrlCC(&config,urlCC);
+    curlRegistro->respuesta[0] = '\0';
+    //curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);// MUY UTIL
+    curl_easy_setopt(curl, CURLOPT_URL, urlCC);
+    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, escrituraCallBack);
+    curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void *)curlRegistro);
     curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
     curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
-    CURLcode res = curl_easy_perform(curl);
-    if (res != CURLE_OK) {
-        fprintf(stderr, "Error en la peticion GET: %s\n", curl_easy_strerror(res));
-    } else {
-        if (chunk.response == NULL || strlen(chunk.response) == 0 || strcmp(chunk.response, "[]") == 0) {
-            printf("No hay datos disponibles en la API.\n");
-        } else {
-            cJSON *json_respuesta = cJSON_Parse(chunk.response);
-            if (!json_respuesta) {
-                printf("Error al parsear JSON: %s\n", cJSON_GetErrorPtr());
-            } else {
-                if (!cJSON_IsArray(json_respuesta)) {
-                    printf("El JSON no es un array como se esperaba.\n");
-                } else {
-                    int num_jugadores = cJSON_GetArraySize(json_respuesta);
 
-                    for (int i = 0; i < num_jugadores; i++) {
-                        cJSON *jugador = cJSON_GetArrayItem(json_respuesta, i);
-                        cJSON *nombre = cJSON_GetObjectItem(jugador, "nombreJugador");
-                        cJSON *puntos = cJSON_GetObjectItem(jugador, "cantidadPartidasGanadas");
-                        memcpy(jug.nombre, nombre->valuestring, sizeof(jug.nombre));
-                        jug.puntos = puntos->valueint;
-                        ponerPrimeroLista(&listaJug, &jug, sizeof(tJugAPI));
-                    }
-                }
-                cJSON_Delete(json_respuesta);
-            }
-        }
-    }
-    ordenarLista(&listaJug, comparoPorPuntaje);
-//    grafica(4);
-    printf("\n\t\t\t\tNombre:\tPuntos:\n");
-    recorrerLista(&listaJug, imprimoRanking, NULL);
-    curl_easy_cleanup(curl);
-    free(chunk.response);
+    codRes=curl_easy_perform(curl);
+    return codRes==CURLE_OK;
 }
-void enviarResultadoJugadorAPI(char *nombreJugador, int vencedor, const char *codigoGrupo)
+//Funciones Para el Posteo
+int postearEstado(const tConfig *config,const char *json)
 {
-    if (!nombreJugador || !codigoGrupo) {
-        fprintf(stderr, "Error: Datos de jugador o CodigoGrupo inválidos.\n");
-        return;
+    CURL *urlDoce=curl_easy_init();
+    struct curl_slist *tipoDato=NULL;
+    CURLcode resultado;
+    char url[288];
+    long codigoHTTP;
+    if(!urlDoce)
+        return 0;
+    //Inicializar La Url
+    configDarUrl(config,url);
+    curl_easy_setopt(urlDoce,CURLOPT_URL,url);
+    //curl_easy_setopt(urlDoce, CURLOPT_VERBOSE, 1L); MUY UTIL
+    curl_easy_setopt(urlDoce,CURLOPT_POST,1L);
+    //Poner el Header adecuado y el contenido a postear
+    tipoDato = curl_slist_append(tipoDato, "Content-Type: application/json");
+    curl_easy_setopt(urlDoce, CURLOPT_HTTPHEADER, tipoDato);
+    curl_easy_setopt(urlDoce, CURLOPT_POSTFIELDS, json);
+    curl_easy_setopt(urlDoce, CURLOPT_SSL_VERIFYPEER, 0L);
+    //curl_easy_setopt(urlDoce, CURLOPT_SSL_VERIFYHOST, 0L);
+    resultado = curl_easy_perform(urlDoce);
+    //Ver Respuesta HTTP
+    curl_easy_getinfo(urlDoce, CURLINFO_RESPONSE_CODE, &codigoHTTP);
+    //LiberarMemoria
+    curl_slist_free_all(tipoDato);
+    curl_easy_cleanup(urlDoce);
+    if(resultado!=CURLE_OK)
+    {
+        return 0;
     }
-
-
-    cJSON *json_raiz = cJSON_CreateObject();
-    if (!json_raiz) {
-        fprintf(stderr, "Error al crear el objeto JSON raiz.\n");
-        return;
-    }
-
-    cJSON_AddStringToObject(json_raiz, "CodigoGrupo", codigoGrupo);
-
-    cJSON *json_jugador = cJSON_CreateObject();
-    if (!json_jugador) {
-        fprintf(stderr, "Error al crear el objeto JSON de jugador.\n");
-        cJSON_Delete(json_raiz);
-        return;
-    }
-
-    cJSON_AddStringToObject(json_jugador, "nombre", nombreJugador);
-    cJSON_AddNumberToObject(json_jugador, "vencedor", vencedor);
-
-    cJSON_AddItemToObject(json_raiz, "jugador", json_jugador);
-
-    char *json_str = cJSON_PrintUnformatted(json_raiz);
-    if (!json_str) {
-        fprintf(stderr, "Error al generar JSON.\n");
-        cJSON_Delete(json_raiz);
-        return;
-    }
-    printf("JSON enviado:\n%s\n", json_str);
-
-    CURL *curl = curl_easy_init();
-    if (curl) {
-        CURLcode res;
-        curl_easy_setopt(curl, CURLOPT_URL, URL_API);
-        curl_easy_setopt(curl, CURLOPT_POST, 1L);
-
-        struct curl_slist *headers = NULL;
-        headers = curl_slist_append(headers, "Content-Type: application/json");
-        curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
-
-        curl_easy_setopt(curl, CURLOPT_POSTFIELDS, json_str);
-        curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
-        curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
-
-        res = curl_easy_perform(curl);
-
-        long response_code;
-        curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &response_code);
-        printf("Código de respuesta HTTP: %ld\n", response_code);
-
-        if (res != CURLE_OK) {
-            fprintf(stderr, "Error en la petición: %s\n", curl_easy_strerror(res));
-        } else {
-            printf("Resultado del jugador enviado con éxito.\n");
-        }
-
-        curl_slist_free_all(headers);
-        curl_easy_cleanup(curl);
-    }
-
-    cJSON_Delete(json_raiz);
-    free(json_str);
+    return codigoHTTP;
 }
-
+int cargarConfig(const char* nombreArchConfig,tConfig* config)
+{
+    FILE* archivoConfig=fopen(nombreArchConfig,"rt");
+    char buffer[256],*cursor;
+    if(!archivoConfig)
+        return 0;
+    fgets(buffer,256,archivoConfig);
+    fclose(archivoConfig);
+    cursor=_strcpyWhile(config->url,buffer,'|');
+    cursor++;
+    _strcpyWhile(config->codigo,cursor,'\n');
+    return 1;
+}
+//Funcion solo para el caso especifico
+//NO USAR FUERA DE OTRO LADO
+//MUY ROMPIBLE
+char* _strcpyWhile(char* dest,char* source,char end)
+{
+    while (*source!=end)
+    {
+        *dest=*source;
+        dest++;
+        source++;
+    }
+    *dest='\0';
+    return source;
+}
+void configDarUrl(const tConfig *config,char* destino)
+{
+    strcpy(destino,config->url);
+}
+void configDarUrlCC(const tConfig *config,char* destino)
+{
+    strcpy(destino,config->url);
+    strcat(destino,"/");
+    strcat(destino,config->codigo);
+}

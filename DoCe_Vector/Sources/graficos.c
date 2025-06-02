@@ -72,13 +72,22 @@ void grafica(int opc)
         printf("\n\t*****************************************************************************************\n\n\n");
         printf("\t\t\t Tu oponente se impone. Vuelve a intentarlo.\n\n");
         break;
- case MAZOMEZCLADO: // Mazo mezclado
+    case MAZOMEZCLADO: // Mazo mezclado
         limpiarPantalla();
         printf("\n\t*********************************************************************************");
         printf("\n\t/////////////////////////////////////////////////////////////////////////////////");
-        printf("\n\t**                        ¡El mazo ha sido mezclado!                          **");
+        printf("\n\t**___  ___                    ___  ___                  _             _        **");
+        printf("\n\t**|  \\/  |                    |  \\/  |                 | |           | |       **");
+        printf("\n\t**| .  . |  __ _  ____  ___   | .  . |  ___  ____  ___ | |  __ _   __| |  ___  **");
+        printf("\n\t**| |\\/| | / _` ||_  / / _ \\  | |\\/| | / _ \\|_  / / __|| | / _` | / _` | / _ \\ **");
+        printf("\n\t**| |  | || (_| | / / | (_) | | |  | ||  __/ / / | (__ | || (_| || (_| || (_) |**");
+        printf("\n\t**\\_|  |_/ \\__,_|/___| \\___/  \\_|  |_/ \\___|/___| \\___||_| \\__,_| \\__,_| \\___/ **");
         printf("\n\t/////////////////////////////////////////////////////////////////////////////////");
-        printf("\n\t*********************************************************************************\n\n\n");
+        printf("\n\t*********************************************************************************");
+        printf("\n\t\t    ** El mazo ha sido mezclado... ¡la suerte esta echada!  **");
+        printf("\n\t\t    ** Preparate. Lo que venga ahora depende del destino... **");
+        printf("\n\t**********************************************************************************\n");
+
         break;
 
     case RANKING: //Ranking
@@ -160,7 +169,7 @@ int menu(char opcion)
         break;
     case CONDVERRANKING:
         grafica(RANKING);
-        recuperar_de_api();
+        verRanking();
         break;
     case CONDSALIR:
         puts("Saliendo del programa...");
@@ -172,18 +181,20 @@ int menu(char opcion)
     system("cls");
     return opcion;
 }
-void print_carta_mas1() {
+void print_carta_mas1()
+{
 
-    printf(" _____\n");
-    printf("|+1   |\n");
-    printf("|     |\n");
-    printf("|   +1|\n");
-    printf("|_____|\n");
+    printf("\t _____\n");
+    printf("\t|+1   |\n");
+    printf("\t|     |\n");
+    printf("\t|   +1|\n");
+    printf("\t|_____|\n");
 
 }
 
 // Carta -1
-void print_carta_menos1() {
+void print_carta_menos1()
+{
 
     printf("\t _____\n");
     printf("\t|-1   |\n");
@@ -194,9 +205,10 @@ void print_carta_menos1() {
 }
 
 // Carta +2
-void print_carta_mas2() {
+void print_carta_mas2()
+{
 
-   printf("\t _____\n");
+    printf("\t _____\n");
     printf("\t|+2   |\n");
     printf("\t|     |\n");
     printf("\t|   +2|\n");
@@ -204,18 +216,20 @@ void print_carta_mas2() {
 }
 
 // Carta -2
-void print_carta_menos2() {
+void print_carta_menos2()
+{
 
     printf("\t _____\n");
     printf("\t|-2   |\n");
     printf("\t|     |\n");
     printf("\t|   -2|\n");
-   printf("\t|_____|\n");
+    printf("\t|_____|\n");
 
 }
 
 // Carta REPETIR
-void print_carta_repetir() {
+void print_carta_repetir()
+{
 
     printf("\t _____\n");
     printf("\t|REP  |\n");
@@ -226,11 +240,12 @@ void print_carta_repetir() {
 }
 
 // Carta ESPEJO
-void print_carta_espejo() {
+void print_carta_espejo()
+{
 
     printf("\t _____\n");
     printf("\t|ES   |\n");
     printf("\t| PE  |\n");
     printf("\t|   JO|\n");
-   printf("\t|_____|\n");
+    printf("\t|_____|\n");
 }

@@ -15,6 +15,7 @@
 #define INGRESODIFICULTAD 7
 #define JUEGAJUGADOR 8
 #define JUEGAMAQUINA 9
+typedef void (*Print)();
 
 void grafica(int opc);
 int menu(char opcion);

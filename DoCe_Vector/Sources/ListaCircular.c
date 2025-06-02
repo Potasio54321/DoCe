@@ -16,7 +16,6 @@ void vaciarLista360(tLista360 *pLista)
         return;
     elim=(*pLista)->sig;
     cursor=elim;
-    //a b c d e -> a
     while(cursor!=*pLista)
     {
         cursor=elim->sig;
@@ -147,7 +146,6 @@ int recorrerLista360(const tLista360* pLista360, int (*accion)(void *a, void *b)
     {
         return -1;
     }
-    //Correr Desde el Inicio
     cursor=(*pLista360)->sig;
 
     do

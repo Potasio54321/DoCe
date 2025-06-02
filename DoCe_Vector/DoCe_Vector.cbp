@@ -34,6 +34,7 @@
 		<Unit filename="Headers/API.h" />
 		<Unit filename="Headers/Grafica.h" />
 		<Unit filename="Headers/ListaCircular.h" />
+		<Unit filename="Headers/ListaSEnlazada.h" />
 		<Unit filename="Headers/PilaEstatica.h" />
 		<Unit filename="Headers/Sistema.h" />
 		<Unit filename="Headers/cJSON.h" />
@@ -43,6 +44,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="Sources/ListaCircular.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Sources/ListaSEnlazada.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="Sources/PilaEstatica.c">

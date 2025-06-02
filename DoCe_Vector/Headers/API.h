@@ -1,29 +1,35 @@
 #ifndef API_H_INCLUDED
 #define API_H_INCLUDED
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <curl/curl.h>
-#include "cJSON.h"
-#include "Juego.h"
-
-
+#include <stddef.h>
+#define TAMNOMBRE 248
+#define ERR_MEM 1
+#define ERR_CURL 2
+#define ERR_CJSON 3
+//NombreArchivoConfig
+#define NOMBRE_ARCH_CONFIG "Config.txt"
 #define URL_API "https://algoritmos-api.azurewebsites.net/api/doce"
 #define URL_API2 "https://algoritmos-api.azurewebsites.net/api/doce/arreglo"
 
-struct Memory {
-    char *response;
-    size_t size;
-};
+typedef struct{
+    char* respuesta;
+    size_t tam;
+}tMemoria;
 
 typedef struct{
     char nombre[35];
-    int puntos;
+    unsigned cantidadPartidasGanadas;
 }tJugAPI;
 
+typedef struct
+{
+    char url[256];
+    char codigo[32];
+}tConfig;
 
-size_t write_callback(void *data, size_t size, size_t nmemb, void *userp);
+int verRanking();
+int cargarConfig(const char* nombreArchConfig,tConfig* config);
+int postearEstado(const tConfig *config,const char *json);
+
 void recuperar_de_api(void);
 void enviarResultadoJugadorAPI(char *nombreJugador, int vencedor, const char *codigoGrupo);
 

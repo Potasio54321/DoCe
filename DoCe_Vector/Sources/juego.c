@@ -4,8 +4,7 @@
 #include <time.h>
 #include <curl/curl.h>
 #include <curl/easy.h>
-#include "..\Headers\juego.h"
-#include "..\Headers\Menu.h"
+#include "../Headers/juego.h"
 #include "..\Headers\Grafica.h"
 #include "..\Headers\ListaCircular.h"
 #include "..\Headers\Sistema.h"
@@ -14,15 +13,11 @@
 int jugar(tLista360 *listaTurnos, tJugador *jugador, tJugador *maquina);
 int VerGanador(const tJugador *jugador,const tJugador *maquina);
 //Funciones Informe
+int informeEstadoAPI(const tJugador*jugador,int estado);
 int generarInforme(tLista360 *ListaTurnos,tJugador *jugador,tJugador *maquina);
 int informarTurno(tLista360 *listaTurnos,tJugador* jugador);
-//Funciones API
-int cargarConfig(const char* nombreArchConfig,tConfig* config);
-void configDarUrlCC(const tConfig *config,char* destino);
-int abrirArchivoTextoConNombreAppend(FILE **archivo,const char* nombreInicial,ACT append,const char* modoApertura);
+int abrirArchivoTextoConNombreAppend(FILE **archivo,const char* nombreInicial,ACT append ,const char* modoApertura);
 int appendFecha(void* Cadena,void* NULO);
-int informeEstadoAPI(const tJugador*jugador,int estado);
-int postearEstado(const tConfig *config,const char *json);
 //Funciones Mostrar
 void mostrarUltimaCartaJugadaJugador(const tJugador* jugador);
 void mostrarGanador(const tJugador *jugador,const tJugador *maquina);
@@ -32,6 +27,7 @@ void mostrarJugadorCartas(const tJugador *jugador);
 void dar3CartasJugador(tJugador* jugador,tPila* mazo);
 void darCartaJugador(tJugador* jugador,tPila* mazo);
 int cargarMazo(tPila *mazo);
+int cargarMazoDescartes(tPila* mazo,tPila* descartes);
 //Funciones Decision
 int elegirCarta(void* Jugador,void* Maquina);
 int decisionFacil(void* Maquina,void* Jugador);
@@ -53,8 +49,8 @@ int condSoloRestaORepite(const void*Carta);
 int condSoloResta(const void*Carta);
 int condSoloSuma(const void*Carta);
 //Funciones tRonda
-void crearRondas(tLista360* rondas,tJugador* jugador,tJugador* maquina,tPila* mazo);
-void crearRonda(tRonda* ronda,tJugador* jugador,tJugador* oponente,tPila* mazo,ACT decision);
+void crearRondas(tLista360* rondas,tJugador* jugador,tJugador* maquina,tPila* mazo, tPila* descartadas);
+void crearRonda(tRonda* ronda,tJugador* jugador,tJugador* oponente,tPila* mazo, tPila* descartadas,ACT decision);
 int jugarRondaConLista(void* Ronda,void* ListaINFO);
 void rondaDarCarta(const tRonda* ronda);
 int rondaFinalizoJuego(const tRonda* ronda);
@@ -63,19 +59,14 @@ void aplicarEfecto(tJugador *aplica, tJugador *aplicado);
 //Funciones Ingreso
 ACT selecionarDificultad();
 int ingresoJugador(tJugador *jugador);
-//
-char* _strcpyWhile(char* dest,char* source,char end);
 
 int iniciarJuego()
 {
     int resultado;
     tJugador jugador;
     tJugador maquina={"Maquina",0};
-    tConfig config;
-
     tLista360 listaTurnos;
-    cargarConfig(NOMBRE_ARCH_CONFIG, &config);
-    //int a;
+
     if(!ingresoJugador(&jugador)) //si no se ingreso jugador vuelve al menu
         return 0;
 
@@ -88,23 +79,24 @@ int iniciarJuego()
     generarInforme(&listaTurnos,&jugador, &maquina);
     vaciarLista360(&listaTurnos);
 
-    enviarResultadoJugadorAPI(jugador.nombre, resultado, config.codigo);
-
-   // a=informeEstadoAPI(&jugador,VerGanador(&jugador,&maquina));
-   // printf("Codigo http:%d\n",a);
+    if(informeEstadoAPI(&jugador,VerGanador(&jugador,&maquina))!=204)
+        puts("No se pudo enviar el resultado de la partida");
+    else
+        puts("Se pudo enviar el resultado de la partida");
     return 1;
 }
 int jugar(tLista360 *listaTurnos, tJugador *jugador, tJugador *maquina)
 {
     int resultado=-1;
     tPila mazo;
+    tPila descartadas;
     tLista360 rondas;
     srand(time(NULL));
     crearPila(&mazo);
+    crearPila(&descartadas);
     crearLista360(&rondas);
-    crearRondas(&rondas,jugador,maquina,&mazo);
+    crearRondas(&rondas,jugador,maquina,&mazo,&descartadas);
 
-    jugador->puntos=12;    //Opcional solo para testeo
     do
     {
         if(!recorrerLista360(&rondas,jugarRondaConLista,listaTurnos))
@@ -140,75 +132,7 @@ int informeEstadoAPI(const tJugador*jugador,int estado)
         return 0;
     sprintf(textoJSON,"{\"CodigoGrupo\":\"%s\",\"jugador\":{\"nombre\":\"%s\",\"vencedor\":\"%d\"}}"
             ,config.codigo,jugador->nombre,estado);
-    //hacer un un texto cjson que cumpla con codigogrupo y codigo
-    //jugador nombre: jugador->nombre, vencedor: estado
-    //Enviarlo por API
     return postearEstado(&config,textoJSON);
-}
-int cargarConfig(const char* nombreArchConfig,tConfig* config)
-{
-    FILE* archivoConfig=fopen(nombreArchConfig,"rt");
-    char buffer[256],*cursor;
-    if(!archivoConfig)
-        return 0;
-    fgets(buffer,256,archivoConfig);
-    fclose(archivoConfig);
-    cursor=_strcpyWhile(config->url,buffer,'|');
-    cursor++;
-    _strcpyWhile(config->codigo,cursor,'\n');
-    return 1;
-}
-//Funcion solo para el caso especifico
-//NO USAR FUERA DE OTRO LADO
-//MUY ROMPIBLE
-char* _strcpyWhile(char* dest,char* source,char end)
-{
-    while (*source!=end)
-    {
-        *dest=*source;
-        dest++;
-        source++;
-    }
-    *dest='\0';
-    return source;
-}
-int postearEstado(const tConfig *config,const char *json)
-{
-    CURL *urlDoce=curl_easy_init();
-    struct curl_slist *tipoDato=NULL;
-    CURLcode resultado;
-    char urlCC[288];
-    long codigoHTTP;
-    if(!urlDoce)
-        return 0;
-    //Inicializar La Url
-    configDarUrlCC(config,urlCC);
-    curl_easy_setopt(urlDoce,CURLOPT_URL,urlCC);
-    //curl_easy_setopt(urlDoce, CURLOPT_VERBOSE, 1L); MUY UTIL
-    curl_easy_setopt(urlDoce,CURLOPT_POST,1L);
-    //Poner el Header adecuado y el contenido a postear
-    tipoDato = curl_slist_append(tipoDato, "Content-Type: application/json");
-    curl_easy_setopt(urlDoce, CURLOPT_HTTPHEADER, tipoDato);
-    curl_easy_setopt(urlDoce, CURLOPT_POSTFIELDS, json);
-    curl_easy_setopt(urlDoce, CURLOPT_SSL_VERIFYPEER, 0L);
-    //curl_easy_setopt(urlDoce, CURLOPT_SSL_VERIFYHOST, 0L);
-    resultado = curl_easy_perform(urlDoce);
-    //Ver Respuesta HTTP
-    curl_easy_getinfo(urlDoce, CURLINFO_RESPONSE_CODE, &codigoHTTP);
-    //LiberarMemoria
-    curl_slist_free_all(tipoDato);
-    curl_easy_cleanup(urlDoce);
-    if(resultado!=CURLE_OK)
-    {
-        return 0;
-    }
-    return codigoHTTP;
-}
-void configDarUrlCC(const tConfig *config,char* destino)
-{
-    strcpy(destino,config->url);
-    //strcat(destino,"/");
-    //strcat(destino,config->codigo);
 }
 int generarInforme(tLista360 *ListaTurnos,tJugador *jugador,tJugador *maquina)
 {
@@ -251,55 +175,25 @@ int appendFecha(void* Cadena,void* NULO)
 void mostrarUltimaCartaJugadaJugador(const tJugador* jugador)
 {
     char Cartas[6][7]={"+2","+1","-1","-2","Repite","Espejo"};
-    printf("Carta jugada Por %s es %s\n",jugador->nombre,Cartas[jugador->mazo[3]-'a']);
+    Print printCartas[6]={print_carta_mas2,print_carta_mas1,print_carta_menos1,print_carta_menos2,print_carta_repetir,print_carta_espejo};
+    printf("\nUltima carta jugada por %s es %s\n",jugador->nombre,Cartas[jugador->mazo[3]-'a']);
+    printCartas[jugador->mazo[3]-'a']();
 }
 void mostrarPuntajeJugador(const tJugador* jugador)
 {
     printf("%s Tiene %d Puntos\n",jugador->nombre,jugador->puntos);
 }
-//void mostrarJugadorCartas(const tJugador *jugador)
-//{
-//    char Cartas[6][7]={"+2","+1","-1","-2","Repite","Espejo"};
-//    int i;
-//    printf("\n TUS CARTAS SON:\n");
-//    for(i=0;i<3;i++)
-//    {
-//        printf("%d) %s ",i+1,Cartas[jugador->mazo[i]-'a']);
-//    }
-//    puts("");
-//}
-
 void mostrarJugadorCartas(const tJugador *jugador)
 {
-    //char Cartas[6][7]={"+2","+1","-1","-2","Repite","Espejo"};
+    char Cartas[6][7]={"+2","+1","-1","-2","Repite","Espejo"};
+    Print printCartas[6]={print_carta_mas2,print_carta_mas1,print_carta_menos1,print_carta_menos2,print_carta_repetir,print_carta_espejo};
     int i;
     printf("\n TUS CARTAS SON:\n");
     for(i=0;i<3;i++)
     {
-        printf("\n\tCarta %d):\n", i + 1);
-
-        switch (jugador->mazo[i]) {
-            case SUMA2: // 'a'
-                print_carta_mas2();
-                break;
-            case SUMA1: // 'b'
-                print_carta_mas1();
-                break;
-            case RESTA1: // 'c'
-                print_carta_menos1();
-                break;
-            case RESTA2: // 'd'
-                print_carta_menos2();
-                break;
-            case REPITE: // 'e'
-                print_carta_repetir();
-                break;
-            case ESPEJO: // 'f'
-                print_carta_espejo();
-                break;
-        }
+        printf("\n\tCarta %d): %s\n", i + 1,Cartas[jugador->mazo[i]-'a']);
+        printCartas[jugador->mazo[i]-'a']();
     }
-
     puts("");
 }
 
@@ -320,8 +214,6 @@ void darCartaJugador(tJugador* jugador,tPila* mazo)
 {
     char* cartaJugada=jugador->mazo;
     char* ultimaCarta=jugador->mazo+3;
-    if(pilaVacia(mazo))
-        cargarMazo(mazo);
     while (cartaJugada<ultimaCarta&&*cartaJugada!='\0')
         cartaJugada++;
     if(cartaJugada!=ultimaCarta&&!*cartaJugada)
@@ -340,6 +232,26 @@ int cargarMazo(tPila *mazo)
             return 0;
         cantCartas--;
         cartas[cartaElegida]=cartas[cantCartas];
+    }
+    grafica(MAZOMEZCLADO);
+    pausarPantalla();
+    return 1;
+}
+int cargarMazoDescartes(tPila* mazo,tPila* descartes)
+{
+    char cartasDescartadas[41-5];
+    char* cartaDescartadaAct=cartasDescartadas;
+    unsigned cantCartas=41-6;
+    unsigned cartaElegida;
+    while (sacarDePila(descartes,cartaDescartadaAct,sizeof(char)))
+        cartaDescartadaAct++;
+    while (cantCartas>0)
+    {
+        cartaElegida=rand()%cantCartas;
+        if(!ponerEnPila(mazo,cartasDescartadas+cartaElegida,sizeof(char)))
+            return 0;
+        cantCartas--;
+        cartasDescartadas[cartaElegida]=cartasDescartadas[cantCartas];
     }
     grafica(MAZOMEZCLADO);
     pausarPantalla();
@@ -428,13 +340,12 @@ int decisionDificil(void* Maquina,void* Jugador)
     return maquina->mazo[3];
 }
 //Funciones Ronda
-void crearRondas(tLista360* rondas,tJugador* jugador,tJugador* maquina,tPila* mazo)
+void crearRondas(tLista360* rondas,tJugador* jugador,tJugador* maquina,tPila* mazo,tPila* descartadas)
 {
     tJugador*primero=maquina;
     ACT decisionPrimero=selecionarDificultad();
     tJugador*segundo=jugador;
     ACT decisionSegundo=elegirCarta;
-    //ACT decisionSegundo=rand3;
     ACT CAMBIO;
     tRonda rondaAct;
     if(rand()%2)
@@ -445,18 +356,19 @@ void crearRondas(tLista360* rondas,tJugador* jugador,tJugador* maquina,tPila* ma
         segundo=maquina;
         decisionSegundo=CAMBIO;
     }
-    crearRonda(&rondaAct,primero,segundo,mazo,decisionPrimero);
+    crearRonda(&rondaAct,primero,segundo,mazo,descartadas,decisionPrimero);
     ponerEnLista360Fin(rondas,&rondaAct,sizeof(rondaAct));
-    crearRonda(&rondaAct,segundo,primero,mazo,decisionSegundo);
+    crearRonda(&rondaAct,segundo,primero,mazo,descartadas,decisionSegundo);
     ponerEnLista360Fin(rondas,&rondaAct,sizeof(rondaAct));
     dar3CartasJugador(primero,mazo);
     dar3CartasJugador(segundo,mazo);
 }
-void crearRonda(tRonda* ronda,tJugador* jugador,tJugador* oponente,tPila* mazo,ACT decision)
+void crearRonda(tRonda* ronda,tJugador* jugador,tJugador* oponente,tPila* mazo,tPila*descartadas,ACT decision)
 {
     ronda->jugador=jugador;
     ronda->oponente=oponente;
     ronda->mazo=mazo;
+    ronda->descartes=descartadas;
     ronda->decision=decision;
 }
 int jugarRondaConLista(void* Ronda,void* ListaINFO)
@@ -468,12 +380,13 @@ int jugarRondaConLista(void* Ronda,void* ListaINFO)
     {
         cartaElegida=ronda->decision(ronda->jugador,ronda->oponente);
         rondaAplicarEfecto(ronda);
+        if(!informarTurno(listaInfo,ronda->jugador))
+            return 0;
+        if(rondaFinalizoJuego(ronda))
+            return 0;
         rondaDarCarta(ronda);
-        if(!informarTurno(listaInfo,ronda->jugador))//SI FALLA CANCELAR PARTIDA DAR MEJOR GANADOR
-            return 0;//PODRIA HABER EMPATE
     } while (cartaElegida=='e');
-    if(rondaFinalizoJuego(ronda))
-        return 0;
+
     return cartaElegida;
 }
 int informarTurno(tLista360 *listaTurnos,tJugador* jugador)
@@ -490,6 +403,9 @@ int informarTurno(tLista360 *listaTurnos,tJugador* jugador)
 }
 void rondaDarCarta(const tRonda* ronda)
 {
+    ponerEnPila(ronda->descartes,ronda->jugador->mazo+3,sizeof(char));
+    if(pilaVacia(ronda->mazo))
+        cargarMazoDescartes(ronda->mazo,ronda->descartes);
     darCartaJugador(ronda->jugador,ronda->mazo);
 }
 int rondaFinalizoJuego(const tRonda* ronda)
@@ -550,7 +466,7 @@ int ingresoJugador(tJugador *jugador)
         limpiarPantalla();
         grafica(6);
         registrarInput(jugador->nombre,sizeof(jugador->nombre),condInsercionAceptable);
-        if (strcmp(jugador->nombre, "0\n") == 0)
+        if (strcmp(jugador->nombre, "0") == 0)
             return 0;
 
         if (esNombreValido(jugador->nombre))
@@ -694,13 +610,16 @@ void cargarValoracion(int valoracion[],int valorSuma2,int valorSuma1,int valorRe
 }
 int BuscarCartaConValoracion(const char mazo[],char tam,const int valoracion[])
 {
-    int cartaActual,max=-1;
+    int cartaActual,max=-1,cartaSelecionada=-1;
     for(cartaActual=0;cartaActual<tam;cartaActual++)
     {
         if(max<valoracion[mazo[cartaActual]-SUMA2])
+        {
             max=valoracion[mazo[cartaActual]-SUMA2];
+            cartaSelecionada=cartaActual;
+        }
     }
-    return max;
+    return cartaSelecionada;
 }
 int buscarCartas(const char *mazo,char tam,Cond cumple)
 {
@@ -709,7 +628,7 @@ int buscarCartas(const char *mazo,char tam,Cond cumple)
     for(cartaActual = mazo; cartaActual < fin; cartaActual++)
     {
         if(cumple(cartaActual))
-            return *cartaActual;
+            return cartaActual-mazo;
     }
     return 404;
 }
@@ -743,10 +662,4 @@ int condEspejo(const void*Carta)
 {
     const char* carta=Carta;
     return *carta==ESPEJO;
-}
-int imprimoRanking(void *d1, void *d2)
-{
-    tJugAPI *jugador = (tJugAPI*)d1;
-    printf("\t\t\t\t%s\t%-4d\n", jugador->nombre, jugador->puntos);
-    return 0;
 }

@@ -1,6 +1,0 @@
-JUGADOR: Oscar              
-Ganador: Oscar     
-Puntaje de Oscar: 12
-Puntaje de Maquina: 0
-Listado de turnos:
-Turno: 001	Carta Jugada: +1     	Jugador: Oscar              
