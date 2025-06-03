@@ -537,7 +537,7 @@ int jugarTurnoFacilIA(tJugador *maquina)
 int jugarTurnoMedioIA(tJugador *maquina,const tJugador*jugador)
 {
     int cartaSelecionada;
-    ///1- Si una carta de suma le da la victoria a maquina (llega a 12 puntos o m�s), jugarla.
+    ///1- Si puntos de la maquina >= 8, tratar de sumar puntos (+2, +1)
     if(maquina->puntos >= CERCAGANAR)
     {
         if((cartaSelecionada=buscarCartas(maquina->mazo,3,condSoloSuma))!=404)
@@ -586,7 +586,6 @@ int jugarTurnoDificilIA(tJugador *maquina,const tJugador* jugador)
     ///4- si puntos del jugador >=8: usar -2, si no -1, si no REPITE(si es que tengo mas de 1 carta buena)
     if(jugador->puntos >= CERCAGANAR)
     {
-        //aca me parecio que con 1 carta buena ya era suficiente para jugar un REPITE
         cargarValoracion(valoracion,-1,-1,2,3,cartasBuenas>1?1:-1,-1);
         //+2 +2 repite
         //+1 +2 espejo
