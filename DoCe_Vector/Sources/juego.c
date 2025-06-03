@@ -1,4 +1,3 @@
-//#define TESTEO //ELIMINAR LUEGO
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -467,7 +466,6 @@ void aplicarEfecto(tJugador *aplica, tJugador *aplicado)
             aplicado->puntos-=2;//Quita puntos
         }
         break;
-    //e repite
     default:
         break;
     }
@@ -586,10 +584,7 @@ int jugarTurnoDificilIA(tJugador *maquina,const tJugador* jugador)
     ///4- si puntos del jugador >=8: usar -2, si no -1, si no REPITE(si es que tengo mas de 1 carta buena)
     if(jugador->puntos >= CERCAGANAR)
     {
-        cargarValoracion(valoracion,-1,-1,2,3,cartasBuenas>1?1:-1,-1);
-        //+2 +2 repite
-        //+1 +2 espejo
-        //+2 +2 +1
+        cargarValoracion(valoracion,NOBUSCAR,NOBUSCAR,2,3,cartasBuenas>1?1:NOBUSCAR,NOBUSCAR);
         cartaSelecionada=BuscarCartaConValoracion(maquina->mazo,3,valoracion);
         if(cartaSelecionada!=-1)
             return cartaSelecionada;
@@ -598,7 +593,6 @@ int jugarTurnoDificilIA(tJugador *maquina,const tJugador* jugador)
     if(jugador->puntos >= 2)
     {
         cargarValoracion(valoracion,6,3,2,5,cartasBuenas>1?4:1,0);
-        //suma2 6//suma1 3//resta2 5//resta1 2//repiteConBuenas 4//repite 1//Espejo 0
         if((cartaSelecionada=BuscarCartaConValoracion(maquina->mazo,3,valoracion))!=-1)
             return cartaSelecionada;
     }
@@ -614,7 +608,6 @@ int jugarTurnoDificilIA(tJugador *maquina,const tJugador* jugador)
     if(jugador->puntos == 0)
     {
         cargarValoracion(valoracion,3,2,NOBUSCAR,NOBUSCAR,1,0);
-        //suma2 3//suma1 2//resta2 -1//resta1 -1//repite 1//Espejo 0
         if((cartaSelecionada=BuscarCartaConValoracion(maquina->mazo,3,valoracion))!=-1)
             return cartaSelecionada;
     }
@@ -639,7 +632,7 @@ void cargarValoracion(int valoracion[],int valorSuma2,int valorSuma1,int valorRe
 }
 int BuscarCartaConValoracion(const char mazo[],char tam,const int valoracion[])
 {
-    int cartaActual,max=-1,cartaSelecionada=-1;
+    int cartaActual,max=NOBUSCAR,cartaSelecionada=NOBUSCAR;
     for(cartaActual=0;cartaActual<tam;cartaActual++)
     {
         if(max<valoracion[mazo[cartaActual]-SUMA2])
