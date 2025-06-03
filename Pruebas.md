@@ -43,7 +43,7 @@
   </tr>
   <tr>
     <td colspan="3" style="text-align: center;">
-      <img src="imagenes/Captura1.JPG" alt="Capura1">
+      <img src="imagenes/PruebaDificil1.png" alt="Capura1">
     </td>
   </tr> 
   <tr>
@@ -53,7 +53,7 @@
   </tr>
   <tr>
     <td colspan="3" style="text-align: center;">
-      <img src="imagenes/Captura1.JPG" alt="Capura1">
+      <img src="imagenes/PruebaDificil2.png" alt="Capura1">
     </td>
   </tr> 
   <tr>
@@ -63,7 +63,7 @@
   </tr>
   <tr>
     <td colspan="3" style="text-align: center;">
-      <img src="imagenes/Captura1.JPG" alt="Capura1">
+      <img src="imagenes/PruebaDificil3.png" alt="Capura1">
     </td>
   </tr> 
   <tr>
