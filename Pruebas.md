@@ -13,7 +13,7 @@
   </tr>
   <tr>
     <td colspan="3" style="text-align: center;">
-      <img src="imagenes/Captura1.JPG" alt="Capura1">
+      <img src="imagenes/Prueba Facil.png" alt="Facil">
     </td>
   </tr> 
   <tr>
@@ -23,7 +23,7 @@
   </tr>
   <tr>
     <td colspan="3" style="text-align: center;">
-      <img src="imagenes/Captura1.JPG" alt="Capura1">
+      <img src="imagenes/Prueba Normal 0.png" alt="Normal0">
     </td>
   </tr> 
   <tr>
@@ -33,7 +33,7 @@
   </tr>
   <tr>
     <td colspan="3" style="text-align: center;">
-      <img src="imagenes/Captura1.JPG" alt="Capura1">
+      <img src="imagenes/Prueba Normal 8.png" alt="Normal8">
     </td>
   </tr> 
   <tr>
@@ -73,7 +73,17 @@
   </tr>
   <tr>
     <td colspan="3" style="text-align: center;">
-      <img src="imagenes/Captura1.JPG" alt="Capura1">
+      <img src="imagenes/Prueba Ranking.png" alt="Ranking">
+    </td>
+  </tr>
+  <tr>
+    <td>Se quiere probar qué el mazo de descartes tenga 35 elementos</td>
+    <td>Se espera que diga que hay 35 elementos en descartes, y 40 cartas en total. Porque 35(Descartadas)+5(Por Jugarse)</td>
+    <td>La salida obtenida fue hay 35 cartas en el mazo descarte, 5 en los jugadores y 40 en total</td>
+  </tr>
+  <tr>
+    <td colspan="3" style="text-align: center;">
+      <img src="imagenes/Prueba Cartas.png" alt="Cartas">
     </td>
   </tr> 
   <tr>
