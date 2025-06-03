@@ -152,7 +152,6 @@ int cargaRegistro(CURL *curl,tMemoria *curlRegistro)
     }
     configDarUrlCC(&config,urlCC);
     curlRegistro->respuesta[0] = '\0';
-    //curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);// MUY UTIL
     curl_easy_setopt(curl, CURLOPT_URL, urlCC);
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, escrituraCallBack);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void *)curlRegistro);
@@ -175,14 +174,12 @@ int postearEstado(const tConfig *config,const char *json)
     //Inicializar La Url
     configDarUrl(config,url);
     curl_easy_setopt(urlDoce,CURLOPT_URL,url);
-    //curl_easy_setopt(urlDoce, CURLOPT_VERBOSE, 1L); MUY UTIL
     curl_easy_setopt(urlDoce,CURLOPT_POST,1L);
     //Poner el Header adecuado y el contenido a postear
     tipoDato = curl_slist_append(tipoDato, "Content-Type: application/json");
     curl_easy_setopt(urlDoce, CURLOPT_HTTPHEADER, tipoDato);
     curl_easy_setopt(urlDoce, CURLOPT_POSTFIELDS, json);
     curl_easy_setopt(urlDoce, CURLOPT_SSL_VERIFYPEER, 0L);
-    //curl_easy_setopt(urlDoce, CURLOPT_SSL_VERIFYHOST, 0L);
     resultado = curl_easy_perform(urlDoce);
     //Ver Respuesta HTTP
     curl_easy_getinfo(urlDoce, CURLINFO_RESPONSE_CODE, &codigoHTTP);
@@ -208,9 +205,6 @@ int cargarConfig(const char* nombreArchConfig,tConfig* config)
     _strcpyWhile(config->codigo,cursor,'\n');
     return 1;
 }
-//Funcion solo para el caso especifico
-//NO USAR FUERA DE OTRO LADO
-//MUY ROMPIBLE
 char* _strcpyWhile(char* dest,char* source,char end)
 {
     while (*source!=end)

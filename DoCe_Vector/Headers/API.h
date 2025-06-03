@@ -7,8 +7,6 @@
 #define ERR_CJSON 3
 //NombreArchivoConfig
 #define NOMBRE_ARCH_CONFIG "Config.txt"
-#define URL_API "https://algoritmos-api.azurewebsites.net/api/doce"
-#define URL_API2 "https://algoritmos-api.azurewebsites.net/api/doce/arreglo"
 
 typedef struct{
     char* respuesta;
