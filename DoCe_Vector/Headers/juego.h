@@ -23,6 +23,7 @@
 typedef struct{
     char nombre[20];
     int puntos;
+    int efectoRecibido;
     char mazo[4];
 }tJugador;
 typedef struct{

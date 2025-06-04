@@ -16,7 +16,7 @@ int VerGanador(const tJugador *jugador,const tJugador *maquina);
 int informeEstadoAPI(const tJugador*jugador,int estado);
 int generarInforme(tLista360 *ListaTurnos,tJugador *jugador,tJugador *maquina);
 int informarTurno(tLista360 *listaTurnos,tJugador* jugador);
-int abrirArchivoTextoConNombreAppend(FILE **archivo,const char* nombreInicial,ACT append ,const char* modoApertura);
+int abrirArchivoTextoConNombreAppend(FILE **archivo,const char* nombreInicial,ACT append,const char* modoApertura);
 int appendFecha(void* Cadena,void* NULO);
 //Funciones Mostrar
 void mostrarUltimaCartaJugadaJugador(const tJugador* jugador);
@@ -65,7 +65,7 @@ int iniciarJuego()
 {
     int resultado;
     tJugador jugador;
-    tJugador maquina={"Maquina",0};
+    tJugador maquina= {"Maquina",0};
     tLista360 listaTurnos;
 
     if(!ingresoJugador(&jugador)) //si no se ingreso jugador vuelve al menu
@@ -97,12 +97,12 @@ int jugar(tLista360 *listaTurnos, tJugador *jugador, tJugador *maquina)
     crearPila(&descartadas);
     crearLista360(&rondas);
     crearRondas(&rondas,jugador,maquina,&mazo,&descartadas);
-
     do
     {
         if(!recorrerLista360(&rondas,jugarRondaConLista,listaTurnos))
             resultado=VerGanador(jugador, maquina);
-    }while (resultado != 0 && resultado != 1);
+    }
+    while (resultado != 0 && resultado != 1);
     mostrarGanador(jugador,maquina);
     vaciarLista360(&rondas);
     return resultado;
@@ -137,7 +137,7 @@ int informeEstadoAPI(const tJugador*jugador,int estado)
 }
 int generarInforme(tLista360 *ListaTurnos,tJugador *jugador,tJugador *maquina)
 {
-    char Cartas[6][7]={"+2","+1","-1","-2","Repite","Espejo"};
+    char Cartas[6][7]= {"+2","+1","-1","-2","Repite","Espejo"};
     FILE *archivoInforme;
     tTurno turnoActual;
     tJugador* ganador=VerGanador(jugador,maquina)?jugador:maquina;
@@ -175,8 +175,8 @@ int appendFecha(void* Cadena,void* NULO)
 //Funciones Mostrar
 void mostrarUltimaCartaJugadaJugador(const tJugador* jugador)
 {
-    char Cartas[6][7]={"+2","+1","-1","-2","Repite","Espejo"};
-    Print printCartas[6]={print_carta_mas2,print_carta_mas1,print_carta_menos1,print_carta_menos2,print_carta_repetir,print_carta_espejo};
+    char Cartas[6][7]= {"+2","+1","-1","-2","Repite","Espejo"};
+    Print printCartas[6]= {print_carta_mas2,print_carta_mas1,print_carta_menos1,print_carta_menos2,print_carta_repetir,print_carta_espejo};
     printf("\nUltima carta jugada por %s es %s\n",jugador->nombre,Cartas[jugador->mazo[3]-'a']);
     printCartas[jugador->mazo[3]-'a']();
 }
@@ -186,11 +186,11 @@ void mostrarPuntajeJugador(const tJugador* jugador)
 }
 void mostrarJugadorCartas(const tJugador *jugador)
 {
-    char Cartas[6][7]={"+2","+1","-1","-2","Repite","Espejo"};
-    Print printCartas[6]={print_carta_mas2,print_carta_mas1,print_carta_menos1,print_carta_menos2,print_carta_repetir,print_carta_espejo};
+    char Cartas[6][7]= {"+2","+1","-1","-2","Repite","Espejo"};
+    Print printCartas[6]= {print_carta_mas2,print_carta_mas1,print_carta_menos1,print_carta_menos2,print_carta_repetir,print_carta_espejo};
     int i;
     printf("\n TUS CARTAS SON:\n");
-    for(i=0;i<3;i++)
+    for(i=0; i<3; i++)
     {
         printf("\n\tCarta %d): %s\n", i + 1,Cartas[jugador->mazo[i]-'a']);
         printCartas[jugador->mazo[i]-'a']();
@@ -222,7 +222,7 @@ void darCartaJugador(tJugador* jugador,tPila* mazo)
 }
 int cargarMazo(tPila *mazo)
 {
-    char cartas[41]={"aaaaaabbbbbbbbbbccccccccddddddeeeeeeffff"};
+    char cartas[41]= {"aaaaaabbbbbbbbbbccccccccddddddeeeeeeffff"};
     unsigned cantCartas=40;
     unsigned cartaElegida;
     srand(time(NULL));
@@ -240,9 +240,9 @@ int cargarMazo(tPila *mazo)
 }
 int cargarMazoDescartes(tPila* mazo,tPila* descartes)
 {
-    char cartasDescartadas[41-5];
+    char cartasDescartadas[36];
     char* cartaDescartadaAct=cartasDescartadas;
-    unsigned cantCartas=41-6;
+    unsigned cantCartas=35;
     unsigned cartaElegida;
     while (sacarDePila(descartes,cartaDescartadaAct,sizeof(char)))
         cartaDescartadaAct++;
@@ -258,15 +258,12 @@ int cargarMazoDescartes(tPila* mazo,tPila* descartes)
     pausarPantalla();
     return 1;
 }
+#define TESTEO
 //Funciones Decision
 int elegirCarta(void* Jugador,void* Maquina)
 {
     tJugador* jugador=Jugador;
-    #ifndef TESTEO
     const tJugador* maquina=Maquina;
-    #else
-    tJugador* maquina=Maquina;
-    #endif // TESTEO
     int selecion;
     int entradaValida;
     char input[3];
@@ -278,18 +275,7 @@ int elegirCarta(void* Jugador,void* Maquina)
         mostrarJugadorCartas(jugador);
         mostrarPuntajeJugador(jugador);
         mostrarPuntajeJugador(maquina);
-        #ifdef TESTEO
-        jugador->mazo[0]=1;
-        jugador->mazo[1]=2;
-        jugador->mazo[2]=3;
-        jugador->mazo[3]=4;
-        jugador->puntos=1;
-        maquina->mazo[0]=5;
-        maquina->mazo[1]=6;
-        maquina->mazo[2]=7;
-        maquina->mazo[3]=8;
-        maquina->puntos=1;
-        #endif
+
         printf("%s Ingrese su carta a Jugar: ", jugador->nombre);
         registrarInput(input,sizeof(input),condIgual3);
         if((entradaValida=strAInt(&selecion,input))!=1&&!(entradaValida=rango(selecion,1,3)))
@@ -297,7 +283,8 @@ int elegirCarta(void* Jugador,void* Maquina)
             puts("Ingreso Invalido");
             pausarPantalla();
         }
-    }while(!entradaValida);
+    }
+    while(!entradaValida);
     jugador->mazo[3]=jugador->mazo[selecion-1];
     jugador->mazo[selecion-1]='\0';
     return jugador->mazo[3];
@@ -402,7 +389,8 @@ int jugarRondaConLista(void* Ronda,void* ListaINFO)
         if(rondaFinalizoJuego(ronda))
             return 0;
         rondaDarCarta(ronda);
-    } while (cartaElegida=='e');
+    }
+    while (cartaElegida=='e');
 
     return cartaElegida;
 }
@@ -447,22 +435,47 @@ void aplicarEfecto(tJugador *aplica, tJugador *aplicado)
         break;
     //c -1
     case 'c':
-        aplicado->puntos-=1;
+        if(aplicado->puntos>=1)
+        {
+            aplicado->efectoRecibido=1;
+            aplicado->puntos-=1;
+        }
+        else
+        {
+            aplicado->efectoRecibido=0;
+        }
         break;
     //d -2
     case 'd':
-        aplicado->puntos-=2;
+        if(aplicado->puntos>=2)
+        {
+            aplicado->efectoRecibido=2;
+            aplicado->puntos-=2;
+        }
+        else
+        {
+            if(aplicado->puntos==1)
+            {
+                aplicado->efectoRecibido=1;
+                aplicado->puntos-=1;
+            }
+            else
+            {
+                aplicado->efectoRecibido=0;
+            }
+        }
         break;
     //f espejo
     case 'f':
+
         if(aplicado->mazo[3]=='c')
         {
-            aplica->puntos+=1;//Compensa los puntos perdidos
+            aplica->puntos+=aplica->efectoRecibido;//Compensa los puntos perdidos
             aplicado->puntos-=1;//Quita puntos
         }
         if(aplicado->mazo[3]=='d')
         {
-            aplica->puntos+=2;//Compensa los puntos perdidos
+            aplica->puntos+=aplica->efectoRecibido;//Compensa los puntos perdidos
             aplicado->puntos-=2;//Quita puntos
         }
         break;
@@ -621,7 +634,7 @@ int jugarTurnoDificilIA(tJugador *maquina,const tJugador* jugador)
 }
 //Funciones que Interactuan con el Mazo
 void cargarValoracion(int valoracion[],int valorSuma2,int valorSuma1,int valorResta1
-                    ,int valorResta2,int valorRepite,int valorEspejo)
+                      ,int valorResta2,int valorRepite,int valorEspejo)
 {
     valoracion[0]=valorSuma2;
     valoracion[1]=valorSuma2;
@@ -633,7 +646,7 @@ void cargarValoracion(int valoracion[],int valorSuma2,int valorSuma1,int valorRe
 int BuscarCartaConValoracion(const char mazo[],char tam,const int valoracion[])
 {
     int cartaActual,max=NOBUSCAR,cartaSelecionada=NOBUSCAR;
-    for(cartaActual=0;cartaActual<tam;cartaActual++)
+    for(cartaActual=0; cartaActual<tam; cartaActual++)
     {
         if(max<valoracion[mazo[cartaActual]-SUMA2])
         {
