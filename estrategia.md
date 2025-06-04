@@ -2,7 +2,7 @@
 Para desarrollar este juego utilizamos estructuras de datos vistas en la materia, seleccionadas en función de su comportamiento y de las necesidades específicas de cada parte del sistema:
 
 ## Estructura tJugador🧍‍♂️ :
-Cada jugador tiene su nombre, su puntaje y un vector mazo[4] de cartas. Las tres primeras posiciones representan las cartas en mano, y la cuarta posición almacena la última carta jugada. Esto permite verificar qué carta jugó previamente el oponente, especialmente útil cuando se juega una carta "Espejo".
+Cada jugador tiene su nombre, su puntaje y un vector mazo[4] de cartas. Las tres primeras posiciones representan las cartas en mano, y la cuarta posición almacena la última carta jugada. Esto permite verificar qué carta jugó previamente el oponente, especialmente útil cuando se juega una carta "Espejo". Por último, la estructura de jugador contiene también "Efecto Recibido", esto es para que al momento de que se use la carta espejo, los puntos que se le devuelvan sean sólo los restados y no puntos demás. Por ejemplo, en el caso de que el jugador tenga 0 puntos, y la IA juegue -1, al aplicar el efecto este sigue teniendo 0 puntos, por lo tanto su "efecto Recibido" es 0, pero la última carta jugada por la IA es -1, por lo que al momento de que el jugador utilice Espejo, no se le sumarán puntos a él, pero a la IA si se le restará 1 punto.
 
 ## Dos pilas estáticas🃏:
 Una pila representa el mazo principal de cartas, y la otra, el mazo de descartadas. Para simular el mazo, usamos un vector de char que contiene las cartas representadas por letras:
