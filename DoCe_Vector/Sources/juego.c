@@ -262,12 +262,7 @@ int cargarMazoDescartes(tPila* mazo,tPila* descartes)
 int elegirCarta(void* Jugador,void* Maquina)
 {
     tJugador* jugador=Jugador;
-    #ifndef TESTEO
     const tJugador* maquina=Maquina;
-    #else
-    tJugador* maquina=Maquina;
-    #endif // TESTEO
-    int selecion;
     int entradaValida;
     char input[3];
     grafica(JUEGAJUGADOR);
@@ -278,18 +273,6 @@ int elegirCarta(void* Jugador,void* Maquina)
         mostrarJugadorCartas(jugador);
         mostrarPuntajeJugador(jugador);
         mostrarPuntajeJugador(maquina);
-        #ifdef TESTEO
-        jugador->mazo[0]=1;
-        jugador->mazo[1]=2;
-        jugador->mazo[2]=3;
-        jugador->mazo[3]=4;
-        jugador->puntos=1;
-        maquina->mazo[0]=5;
-        maquina->mazo[1]=6;
-        maquina->mazo[2]=7;
-        maquina->mazo[3]=8;
-        maquina->puntos=1;
-        #endif
         printf("%s Ingrese su carta a Jugar: ", jugador->nombre);
         registrarInput(input,sizeof(input),condIgual3);
         if((entradaValida=strAInt(&selecion,input))!=1&&!(entradaValida=rango(selecion,1,3)))
