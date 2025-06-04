@@ -258,7 +258,6 @@ int cargarMazoDescartes(tPila* mazo,tPila* descartes)
     pausarPantalla();
     return 1;
 }
-#define TESTEO
 //Funciones Decision
 int elegirCarta(void* Jugador,void* Maquina)
 {
@@ -275,7 +274,6 @@ int elegirCarta(void* Jugador,void* Maquina)
         mostrarJugadorCartas(jugador);
         mostrarPuntajeJugador(jugador);
         mostrarPuntajeJugador(maquina);
-
         printf("%s Ingrese su carta a Jugar: ", jugador->nombre);
         registrarInput(input,sizeof(input),condIgual3);
         if((entradaValida=strAInt(&selecion,input))!=1&&!(entradaValida=rango(selecion,1,3)))
