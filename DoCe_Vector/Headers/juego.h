@@ -11,6 +11,7 @@
 #define PERDER 0
 #define TURNONORMAL -1
 //Cartas
+#define CANT_TIPOSCARTAS 6
 #define SUMA2 'a'
 #define SUMA1 'b'
 #define RESTA1 'c'
@@ -20,11 +21,14 @@
 //IA
 #define CERCAGANAR 8
 #define NOBUSCAR -1
+//RONDA ERRORES
+#define FALLAINFORME -1
+#define HAYGANADOR 2
 typedef struct{
     char nombre[20];
     int puntos;
     int efectoRecibido;
-    char mazo[4];
+    char mano[4];
 }tJugador;
 typedef struct{
     char nombre[20];

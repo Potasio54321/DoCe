@@ -134,22 +134,33 @@ int verFinLista360(tLista360 *pLista,void* dato,size_t tamElem)
     memcpy(dato,(*pLista)->info,min((*pLista)->tamElem,tamElem));
     return 1;
 }
-int recorrerLista360(const tLista360* pLista360, int (*accion)(void *a, void *b), void *param)
+void recorrerLista360(const tLista360* pLista360, int (*accion)(void *a, void *b), void *param)
 {
     tNodo *cursor;
-
     if(!*pLista360)
-    {
-        return -1;
-    }
+        return;
     cursor=(*pLista360)->sig;
-
     do
     {
-        if(!accion(cursor->info,param))
-            return 0;
+        accion(cursor->info,param);
         cursor=cursor->sig;
     }
     while(cursor != (*pLista360)->sig);
-    return 1;
+}
+int recorrerLista360ConCond(const tLista360* pLista360, int (*accion)(void *a, void *b), void *param)
+{
+    tNodo *cursor;
+    int ret;
+    if(!*pLista360)
+        return -1;
+    cursor=(*pLista360)->sig;
+    do
+    {
+        ret=accion(cursor->info,param);
+        if(ret!=ACCIONOK)
+            return ret;
+        cursor=cursor->sig;
+    }
+    while(cursor != (*pLista360)->sig);
+    return ret;
 }

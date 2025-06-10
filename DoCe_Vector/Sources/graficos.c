@@ -168,7 +168,6 @@ int menu(char opcion)
         iniciarJuego();
         break;
     case CONDVERRANKING:
-        grafica(RANKING);
         verRanking();
         break;
     case CONDSALIR:
@@ -178,9 +177,9 @@ int menu(char opcion)
         puts("Opcion no valida, por favor intente de nuevo.");
     }
     system("pause");
-    system("cls");
     return opcion;
 }
+// Carta +1
 void print_carta_mas1()
 {
 

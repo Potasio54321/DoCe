@@ -1,6 +1,7 @@
 #include "../Headers/API.h"
 #include "../Headers/ListaSEnlazada.h"
 #include "../Headers/cJSON.h"
+#include "../Headers/Grafica.h"
 #include <curl/curl.h>
 #include <stdio.h>
 //Funciones tConfig
@@ -23,6 +24,7 @@ int verRanking()
     tLista listaJugadores;
     tMemoria curlRegistro;
     CURL *curl = curl_easy_init();
+    grafica(RANKING);
     if (!curl)
     {
         fprintf(stderr, "Error al inicializar cURL\n");
@@ -114,10 +116,10 @@ int respuestaInvalida(tMemoria* curlRegistro)
 {
     return !curlRegistro->respuesta||strlen(curlRegistro->respuesta)==0||strcmp(curlRegistro->respuesta,"[]")==0;
 }
-size_t escrituraCallBack(void *data, size_t tam, size_t ncant, void *userp)
+size_t escrituraCallBack(void *dato, size_t tam, size_t ncant, void *respuestaUsuario)
 {
     size_t ntam = tam * ncant;
-    tMemoria *mem = userp;
+    tMemoria *mem = respuestaUsuario;
 
     char *ptr = realloc(mem->respuesta, mem->tam + ntam + 1);
     if (ptr == NULL)
@@ -126,7 +128,7 @@ size_t escrituraCallBack(void *data, size_t tam, size_t ncant, void *userp)
     }
 
     mem->respuesta = ptr;
-    memcpy(mem->respuesta+mem->tam, data, ntam);
+    memcpy(mem->respuesta+mem->tam, dato, ntam);
     mem->tam += ntam;
     *(mem->respuesta+mem->tam) = '\0';
 

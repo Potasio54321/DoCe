@@ -73,10 +73,14 @@ int iniciarJuego()
 
     //Partida
     crearLista360(&listaTurnos);
-    if((resultado= jugar(&listaTurnos, &jugador, &maquina)) == GANAR)
-        grafica(1);
+    resultado=jugar(&listaTurnos, &jugador, &maquina);
+    if(resultado!=FALLAINFORME)
+        resultado==GANAR?grafica(VICTORIA):grafica(DERROTA);
     else
-        grafica(2);
+    {
+        vaciarLista360(&listaTurnos);
+        return FALLAINFORME;
+    }
     generarInforme(&listaTurnos,&jugador, &maquina);
     vaciarLista360(&listaTurnos);
 
@@ -99,10 +103,17 @@ int jugar(tLista360 *listaTurnos, tJugador *jugador, tJugador *maquina)
     crearRondas(&rondas,jugador,maquina,&mazo,&descartadas);
     do
     {
-        if(!recorrerLista360(&rondas,jugarRondaConLista,listaTurnos))
-            resultado=VerGanador(jugador, maquina);
+        resultado=recorrerLista360ConCond(&rondas,jugarRondaConLista,listaTurnos);
+        if(resultado==FALLAINFORME)
+        {
+            printf("Error En Informe\n");
+            pausarPantalla();
+            vaciarLista360(&rondas);
+            return resultado;
+        }
     }
-    while (resultado != 0 && resultado != 1);
+    while (resultado!=HAYGANADOR);
+    resultado=VerGanador(jugador, maquina);
     mostrarGanador(jugador,maquina);
     vaciarLista360(&rondas);
     return resultado;
@@ -110,15 +121,10 @@ int jugar(tLista360 *listaTurnos, tJugador *jugador, tJugador *maquina)
 void mostrarGanador(const tJugador *jugador,const tJugador *maquina)
 {
     if(VerGanador(jugador,maquina))
-    {
         printf("%s HA PERDIDO\n%s HA GANADO\n",maquina->nombre,jugador->nombre);
-        system("pause");
-    }
     else
-    {
         printf("%s HA PERDIDO\n%s HA GANADO\n",jugador->nombre,maquina->nombre);
-        system("pause");
-    }
+    pausarPantalla();
 }
 int VerGanador(const tJugador *jugador,const tJugador *maquina)
 {
@@ -137,7 +143,7 @@ int informeEstadoAPI(const tJugador*jugador,int estado)
 }
 int generarInforme(tLista360 *ListaTurnos,tJugador *jugador,tJugador *maquina)
 {
-    char Cartas[6][7]= {"+2","+1","-1","-2","Repite","Espejo"};
+    char Cartas[CANT_TIPOSCARTAS][7]= {"+2","+1","-1","-2","Repite","Espejo"};
     FILE *archivoInforme;
     tTurno turnoActual;
     tJugador* ganador=VerGanador(jugador,maquina)?jugador:maquina;
@@ -147,7 +153,7 @@ int generarInforme(tLista360 *ListaTurnos,tJugador *jugador,tJugador *maquina)
             jugador->nombre,ganador->nombre,jugador->nombre,jugador->puntos,maquina->nombre,maquina->puntos);
     while (sacarEnLista360Ini(ListaTurnos,&turnoActual,sizeof(turnoActual)))
     {
-        fprintf(archivoInforme,"Turno: %03d\tCarta Jugada: %-7s\tJugador: %-19s\n",
+        fprintf(archivoInforme,"Turno: %3d\tCarta Jugada: %-7s\tJugador: %-19s\n",
                 turnoActual.turno,Cartas[turnoActual.cartaJugada-'a'],turnoActual.nombre);
     }
     fclose(archivoInforme);
@@ -175,10 +181,10 @@ int appendFecha(void* Cadena,void* NULO)
 //Funciones Mostrar
 void mostrarUltimaCartaJugadaJugador(const tJugador* jugador)
 {
-    char Cartas[6][7]= {"+2","+1","-1","-2","Repite","Espejo"};
-    Print printCartas[6]= {print_carta_mas2,print_carta_mas1,print_carta_menos1,print_carta_menos2,print_carta_repetir,print_carta_espejo};
-    printf("\nUltima carta jugada por %s es %s\n",jugador->nombre,Cartas[jugador->mazo[3]-'a']);
-    printCartas[jugador->mazo[3]-'a']();
+    char Cartas[CANT_TIPOSCARTAS][7]= {"+2","+1","-1","-2","Repite","Espejo"};
+    Print printCartas[CANT_TIPOSCARTAS]= {print_carta_mas2,print_carta_mas1,print_carta_menos1,print_carta_menos2,print_carta_repetir,print_carta_espejo};
+    printf("\nUltima carta jugada por %s es %s\n",jugador->nombre,Cartas[jugador->mano[3]-'a']);
+    printCartas[jugador->mano[3]-'a']();
 }
 void mostrarPuntajeJugador(const tJugador* jugador)
 {
@@ -186,14 +192,14 @@ void mostrarPuntajeJugador(const tJugador* jugador)
 }
 void mostrarJugadorCartas(const tJugador *jugador)
 {
-    char Cartas[6][7]= {"+2","+1","-1","-2","Repite","Espejo"};
-    Print printCartas[6]= {print_carta_mas2,print_carta_mas1,print_carta_menos1,print_carta_menos2,print_carta_repetir,print_carta_espejo};
+    char Cartas[CANT_TIPOSCARTAS][7]= {"+2","+1","-1","-2","Repite","Espejo"};
+    Print printCartas[CANT_TIPOSCARTAS]= {print_carta_mas2,print_carta_mas1,print_carta_menos1,print_carta_menos2,print_carta_repetir,print_carta_espejo};
     int i;
     printf("\n TUS CARTAS SON:\n");
     for(i=0; i<3; i++)
     {
-        printf("\n\tCarta %d): %s\n", i + 1,Cartas[jugador->mazo[i]-'a']);
-        printCartas[jugador->mazo[i]-'a']();
+        printf("\n\tCarta %d): %s\n", i + 1,Cartas[jugador->mano[i]-'a']);
+        printCartas[jugador->mano[i]-'a']();
     }
     puts("");
 }
@@ -201,8 +207,8 @@ void mostrarJugadorCartas(const tJugador *jugador)
 //Funciones Mazo
 void dar3CartasJugador(tJugador* jugador,tPila* mazo)
 {
-    char* cartaJugada=jugador->mazo;
-    char* ultimaCarta=jugador->mazo+3;
+    char* cartaJugada=jugador->mano;
+    char* ultimaCarta=jugador->mano+3;
     if(pilaVacia(mazo))
         cargarMazo(mazo);
     while (cartaJugada<ultimaCarta)
@@ -213,8 +219,8 @@ void dar3CartasJugador(tJugador* jugador,tPila* mazo)
 }
 void darCartaJugador(tJugador* jugador,tPila* mazo)
 {
-    char* cartaJugada=jugador->mazo;
-    char* ultimaCarta=jugador->mazo+3;
+    char* cartaJugada=jugador->mano;
+    char* ultimaCarta=jugador->mano+3;
     while (cartaJugada<ultimaCarta&&*cartaJugada!='\0')
         cartaJugada++;
     if(cartaJugada!=ultimaCarta&&!*cartaJugada)
@@ -283,9 +289,9 @@ int elegirCarta(void* Jugador,void* Maquina)
         }
     }
     while(!entradaValida);
-    jugador->mazo[3]=jugador->mazo[selecion-1];
-    jugador->mazo[selecion-1]='\0';
-    return jugador->mazo[3];
+    jugador->mano[3]=jugador->mano[selecion-1];
+    jugador->mano[selecion-1]='\0';
+    return jugador->mano[3];
 }
 int decisionFacil(void* Maquina,void* Jugador)
 {
@@ -299,11 +305,11 @@ int decisionFacil(void* Maquina,void* Jugador)
     mostrarPuntajeJugador(jugador);
     mostrarPuntajeJugador(maquina);
     selecion=jugarTurnoFacilIA(maquina);
-    maquina->mazo[3]=maquina->mazo[selecion];
-    maquina->mazo[selecion]='\0';
+    maquina->mano[3]=maquina->mano[selecion];
+    maquina->mano[selecion]='\0';
     mostrarUltimaCartaJugadaJugador(maquina);
     pausarPantalla();
-    return maquina->mazo[3];
+    return maquina->mano[3];
 }
 int decisionNormal(void* Maquina,void* Jugador)
 {
@@ -317,11 +323,11 @@ int decisionNormal(void* Maquina,void* Jugador)
     mostrarPuntajeJugador(jugador);
     mostrarPuntajeJugador(maquina);
     selecion=jugarTurnoMedioIA(maquina,jugador);
-    maquina->mazo[3]=maquina->mazo[selecion];
-    maquina->mazo[selecion]='\0';
+    maquina->mano[3]=maquina->mano[selecion];
+    maquina->mano[selecion]='\0';
     mostrarUltimaCartaJugadaJugador(maquina);
     pausarPantalla();
-    return maquina->mazo[3];
+    return maquina->mano[3];
 }
 int decisionDificil(void* Maquina,void* Jugador)
 {
@@ -335,11 +341,11 @@ int decisionDificil(void* Maquina,void* Jugador)
     mostrarPuntajeJugador(jugador);
     mostrarPuntajeJugador(maquina);
     selecion=jugarTurnoDificilIA(maquina,jugador);
-    maquina->mazo[3]=maquina->mazo[selecion];
-    maquina->mazo[selecion]='\0';
+    maquina->mano[3]=maquina->mano[selecion];
+    maquina->mano[selecion]='\0';
     mostrarUltimaCartaJugadaJugador(maquina);
     pausarPantalla();
-    return maquina->mazo[3];
+    return maquina->mano[3];
 }
 //Funciones Ronda
 void crearRondas(tLista360* rondas,tJugador* jugador,tJugador* maquina,tPila* mazo,tPila* descartadas)
@@ -383,14 +389,14 @@ int jugarRondaConLista(void* Ronda,void* ListaINFO)
         cartaElegida=ronda->decision(ronda->jugador,ronda->oponente);
         rondaAplicarEfecto(ronda);
         if(!informarTurno(listaInfo,ronda->jugador))
-            return 0;
+            return FALLAINFORME;
         if(rondaFinalizoJuego(ronda))
-            return 0;
+            return HAYGANADOR;
         rondaDarCarta(ronda);
     }
-    while (cartaElegida=='e');
+    while (cartaElegida==REPITE);
 
-    return cartaElegida;
+    return ACCIONOK;
 }
 int informarTurno(tLista360 *listaTurnos,tJugador* jugador)
 {
@@ -400,13 +406,13 @@ int informarTurno(tLista360 *listaTurnos,tJugador* jugador)
         turnoActual.turno=1;
     else
         turnoActual.turno=turnoPasado.turno+1;
-    turnoActual.cartaJugada=jugador->mazo[3];
+    turnoActual.cartaJugada=jugador->mano[3];
     strcpy(turnoActual.nombre,jugador->nombre);
     return ponerEnLista360Fin(listaTurnos,&turnoActual,sizeof(tTurno));
 }
 void rondaDarCarta(const tRonda* ronda)
 {
-    ponerEnPila(ronda->descartes,ronda->jugador->mazo+3,sizeof(char));
+    ponerEnPila(ronda->descartes,ronda->jugador->mano+3,sizeof(char));
     if(pilaVacia(ronda->mazo))
         cargarMazoDescartes(ronda->mazo,ronda->descartes);
     darCartaJugador(ronda->jugador,ronda->mazo);
@@ -421,18 +427,15 @@ void rondaAplicarEfecto(const tRonda* ronda)
 }
 void aplicarEfecto(tJugador *aplica, tJugador *aplicado)
 {
-    switch (aplica->mazo[3])
+    switch (aplica->mano[3])
     {
-    //a +2
-    case 'a':
+    case SUMA2:
         aplica->puntos+=2;
         break;
-    //b +1
-    case 'b':
+    case SUMA1:
         aplica->puntos+=1;
         break;
-    //c -1
-    case 'c':
+    case RESTA1:
         if(aplicado->puntos>=1)
         {
             aplicado->efectoRecibido=1;
@@ -443,8 +446,7 @@ void aplicarEfecto(tJugador *aplica, tJugador *aplicado)
             aplicado->efectoRecibido=0;
         }
         break;
-    //d -2
-    case 'd':
+    case RESTA2:
         if(aplicado->puntos>=2)
         {
             aplicado->efectoRecibido=2;
@@ -464,14 +466,14 @@ void aplicarEfecto(tJugador *aplica, tJugador *aplicado)
         }
         break;
     //f espejo
-    case 'f':
+    case ESPEJO:
 
-        if(aplicado->mazo[3]=='c')
+        if(aplicado->mano[3]=='c')
         {
             aplica->puntos+=aplica->efectoRecibido;//Compensa los puntos perdidos
             aplicado->puntos-=1;//Quita puntos
         }
-        if(aplicado->mazo[3]=='d')
+        if(aplicado->mano[3]=='d')
         {
             aplica->puntos+=aplica->efectoRecibido;//Compensa los puntos perdidos
             aplicado->puntos-=2;//Quita puntos
@@ -491,7 +493,7 @@ int ingresoJugador(tJugador *jugador)
     do
     {
         limpiarPantalla();
-        grafica(6);
+        grafica(INGRESOJUGADOR);
         registrarInput(jugador->nombre,sizeof(jugador->nombre),condInsercionAceptable);
         if (strcmp(jugador->nombre, "0") == 0)
             return 0;
@@ -516,7 +518,7 @@ ACT selecionarDificultad()
     do
     {
         limpiarPantalla();
-        grafica(7);
+        grafica(INGRESODIFICULTAD);
         registrarInput(input,sizeof(input),condIgual3);
         if((entradaValida=strAInt(&dificultad,input))!=1&&!(entradaValida=rango(dificultad,1,3)))
         {
@@ -549,17 +551,17 @@ int jugarTurnoMedioIA(tJugador *maquina,const tJugador*jugador)
     ///1- Si puntos de la maquina >= 8, tratar de sumar puntos (+2, +1)
     if(maquina->puntos >= CERCAGANAR)
     {
-        if((cartaSelecionada=buscarCartas(maquina->mazo,3,condSoloSuma))!=404)
+        if((cartaSelecionada=buscarCartas(maquina->mano,3,condSoloSuma))!=404)
             return cartaSelecionada;
     }
     if(jugador->puntos==1)///2- Si puntos del jugador < 2, tira la primera carta que no sea -2
     {
-        if((cartaSelecionada=buscarCartas(maquina->mazo,3,condNoResta2))!=404)
+        if((cartaSelecionada=buscarCartas(maquina->mano,3,condNoResta2))!=404)
             return cartaSelecionada;
     }
     if(jugador->puntos==0)///3- Si puntos del jugador < 1, tira la primera carta que no sea -2 y -1
     {
-        if((cartaSelecionada=buscarCartas(maquina->mazo,3,condNoResta))!=404)
+        if((cartaSelecionada=buscarCartas(maquina->mano,3,condNoResta))!=404)
             return cartaSelecionada;
     }
     ///4- Pasa si no se cumplio nada
@@ -569,34 +571,34 @@ int jugarTurnoDificilIA(tJugador *maquina,const tJugador* jugador)
 {
     int cartasBuenas = 0, cartaBuenaActual;
     int cartaSelecionada;
-    int valoracion[6];
+    int valoracion[CANT_TIPOSCARTAS];
     ///1- GanarRapido
     if(maquina->puntos>=10)
     {
-        if((cartaSelecionada=buscarCartas(maquina->mazo,3,maquina->puntos==11?condSoloSuma:condSuma2))!=404)
+        if((cartaSelecionada=buscarCartas(maquina->mano,3,maquina->puntos==11?condSoloSuma:condSuma2))!=404)
             return cartaSelecionada;
     }
     ///2- Si el jugador jugo carta negativa(-1, -2), usar espejo
-    if(rango(jugador->mazo[3],RESTA1,RESTA2))
+    if(rango(jugador->mano[3],RESTA1,RESTA2))
     {
-        if((cartaSelecionada=buscarCartas(maquina->mazo,3,condEspejo))!=404)
+        if((cartaSelecionada=buscarCartas(maquina->mano,3,condEspejo))!=404)
             return cartaSelecionada;
     }
     ///3- Si esta cerca de la victoria y el jugador no que se centre en ganar.
     if(maquina->puntos >= CERCAGANAR&&maquina->puntos>jugador->puntos)
     {
-        if((cartaSelecionada=buscarCartas(maquina->mazo,3,condSoloSuma))!=404)
+        if((cartaSelecionada=buscarCartas(maquina->mano,3,condSoloSuma))!=404)
             return cartaSelecionada;
     }
     //cuento las cartas buneas (+2,+1,-2,-1)
     for(cartaBuenaActual = 0; cartaBuenaActual < 3; cartaBuenaActual++)
-        if(rango(maquina->mazo[cartaBuenaActual],SUMA2,RESTA2))
+        if(rango(maquina->mano[cartaBuenaActual],SUMA2,RESTA2))
             cartasBuenas++;
     ///4- si puntos del jugador >=8: usar -2, si no -1, si no REPITE(si es que tengo mas de 1 carta buena)
     if(jugador->puntos >= CERCAGANAR)
     {
         cargarValoracion(valoracion,NOBUSCAR,NOBUSCAR,2,3,cartasBuenas>1?1:NOBUSCAR,NOBUSCAR);
-        cartaSelecionada=BuscarCartaConValoracion(maquina->mazo,3,valoracion);
+        cartaSelecionada=BuscarCartaConValoracion(maquina->mano,3,valoracion);
         if(cartaSelecionada!=-1)
             return cartaSelecionada;
     }
@@ -604,7 +606,7 @@ int jugarTurnoDificilIA(tJugador *maquina,const tJugador* jugador)
     if(jugador->puntos >= 2)
     {
         cargarValoracion(valoracion,6,3,2,5,cartasBuenas>1?4:1,0);
-        if((cartaSelecionada=BuscarCartaConValoracion(maquina->mazo,3,valoracion))!=-1)
+        if((cartaSelecionada=BuscarCartaConValoracion(maquina->mano,3,valoracion))!=-1)
             return cartaSelecionada;
     }
     ///5- si puntos del jugador == 1, maquina usa la mejor carta posible sin el -2: +2 -> +1 -> -1 -> Repite -> Espejo
@@ -612,20 +614,20 @@ int jugarTurnoDificilIA(tJugador *maquina,const tJugador* jugador)
     {
         cargarValoracion(valoracion,4,3,2,NOBUSCAR,1,0);
         //suma2 4//suma1 3//resta2 -1//resta1 2//repite 1//Espejo 0
-        if((cartaSelecionada=BuscarCartaConValoracion(maquina->mazo,3,valoracion))!=-1)
+        if((cartaSelecionada=BuscarCartaConValoracion(maquina->mano,3,valoracion))!=-1)
             return cartaSelecionada;
     }
     ///6- si puntos del jugador == 0, maquina usa la mejor carta posible sin el -2 y -1: +2 -> +1 -> -1 -> Repite -> Espejo
     if(jugador->puntos == 0)
     {
         cargarValoracion(valoracion,3,2,NOBUSCAR,NOBUSCAR,1,0);
-        if((cartaSelecionada=BuscarCartaConValoracion(maquina->mazo,3,valoracion))!=-1)
+        if((cartaSelecionada=BuscarCartaConValoracion(maquina->mano,3,valoracion))!=-1)
             return cartaSelecionada;
     }
     ///7- En este punto tiene carta -2 o -1 se busca en el mejor caso gastar el -1
     ///El oponente tiene a lo sumo 1 punto
     cargarValoracion(valoracion,NOBUSCAR,NOBUSCAR,1,0,NOBUSCAR,NOBUSCAR);
-    cartaSelecionada=BuscarCartaConValoracion(maquina->mazo,3,valoracion);
+    cartaSelecionada=BuscarCartaConValoracion(maquina->mano,3,valoracion);
     if(cartaSelecionada!=-1)
         return cartaSelecionada;
     return rand()%3;//En caso de que tenga solo menos con pocos puntos elige su cualquier carta

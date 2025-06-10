@@ -1,7 +1,7 @@
 #ifndef LISTA_H_INCLUDED
 #define LISTA_H_INCLUDED
-
 #include <stddef.h>
+#define ACCIONOK 1
 typedef struct sNodo
 {
     void* info;
@@ -24,8 +24,8 @@ int sacarEnLista360Ini(tLista360 *pLista360,void* dato,size_t tamElem);
 int sacarEnLista360Fin(tLista360 *pLista360,void* dato,size_t tamElem);
 int verFinLista360(tLista360 *pLista,void* dato,size_t tamElem);
 
-int recorrerLista360(const tLista360* pLista360, int (*ACT)(void *a, void *b), void *param);
-
+void recorrerLista360(const tLista360* pLista360, int (*ACT)(void *a, void *b), void *param);
+int recorrerLista360ConCond(const tLista360* pLista360, int (*accion)(void *a, void *b), void *param);
 
 
 #endif // LISTA_H_INCLUDED
